@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input"
 
 const formSchema = z.object({
     email: z.string().email({
-        message: "Invalid email address",
+        message: "Невірна адреса електронної пошти",
     }),
 })
 
@@ -30,10 +30,7 @@ export const NotifyForm = () => {
     })
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
         alert("Дякуємо! Ми повідомимо вас про запуск.");
-        console.log("Email submitted:", values);
     }
 
     const { isSubmitting, isValid } = form.formState
