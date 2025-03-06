@@ -1,9 +1,10 @@
 name: Deploy to GitHub Pages
 
 on:
-    push:
-      tags:
-        - "v*"
+  push:
+    tags:
+      - "v*"
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -14,10 +15,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Setup Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      # Install project dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Build the project
+      - name: Build project
+        run: npm run build
+
+      # Deploy the built project to GitHub Pages from the ./out directory
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          publish_dir: ./out
           cname: shryft.com
-
