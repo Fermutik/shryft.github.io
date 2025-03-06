@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className="flex items-center justify-center min-h-screen"
+        className="flex items-center justify-center min-h-screen bg-background-body"
       >
         <ThemeProvider
           attribute="class"

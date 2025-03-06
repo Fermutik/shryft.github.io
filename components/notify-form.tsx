@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { useState } from "react"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import {
@@ -14,6 +15,17 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 const formSchema = z.object({
     email: z.string().email({
@@ -29,8 +41,16 @@ export const NotifyForm = () => {
         },
     })
 
+    // State to control the open state of AlertDialog
+    const [alertOpen, setAlertOpen] = useState(false)
+
+    // Form submit handler: open the alert dialog instead of calling alert()
     function onSubmit(values: z.infer<typeof formSchema>) {
-        alert("Дякуємо! Ми повідомимо вас про запуск.");
+        // Log form submission (for debugging)
+        console.log("Form submitted with:", values)
+        // Open the AlertDialog
+        setAlertOpen(true)
+        form.reset()
     }
 
     const { isSubmitting, isValid } = form.formState
@@ -65,6 +85,23 @@ export const NotifyForm = () => {
             <p className="mt-8 text-sm text-gray-500 dark:text-gray-400">
                 © 2025 shryft.com . Всі права захищені.
             </p>
+            <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Дякуємо!</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Ми зв'яжемося з вами, як тільки проект набуде фінального вигляду.
+                            Будьте з нами, адже попереду багато цікавого!
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogAction onClick={() => setAlertOpen(false)}>
+                            OK
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
+
     )
 }
