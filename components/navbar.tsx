@@ -1,17 +1,46 @@
 import { ModeToggle } from "@/components/mode-toogle";
 import SvgLogo from "@/components/logo";
+import Image from "next/image";
 import Link from "next/link";
 
 // Navbar component fixed at the top with the title on the left and the toggle on the right.
 export const Navbar = () => {
     return (
-        <div className="fixed top-0 left-0 right-0 p-1 flex justify-between items-center z-50 border-b bg-background">
-            <Link href={"/"} className="h-fit w-fit">
-                <SvgLogo className="w-[100[px]] h-[50px]" />
-            </Link>
-            <div className="mr-4">
-                <ModeToggle />
+        <div className="flex flex-col w-full">
+            <div className="flex h-[130px] justify-between items-center">
+                <div className="flex items-center space-x-4 ml-[210px]">
+                    <Link href={"/"} className="h-fit w-fit">
+                        <SvgLogo className="w-[110px] h-[90px]" />
+                    </Link>
+                    <img src="https://placehold.co/500x110/cccccc/ffffff?Image+Placeholder" alt="Placeholder" />
+                    <img src="https://placehold.co/155x110/cccccc/ffffff?Image+Placeholder" alt="Placeholder" />
+                </div>
+                <div className="mr-4 flex space-x-4 ml-[210px] mt-[10px] self-start">
+                    <img src="https://placehold.co/70x36/cccccc/ffffff?Image+Placeholder" alt="Placeholder" />
+                    <ModeToggle />
+                </div>
             </div>
-        </div >
+            <div className="w-full h-[50px] bg-black text-white flex flex-row items-center justify-start">
+                <div className="w-[210px]"></div>
+                <h2 className="w-[200px] flex flex-col items-center justify-center text-center leading-tight">
+                    Малоформатна продукція
+                </h2>
+                <h2 className="w-[140px] flex flex-col items-center justify-center text-center leading-tight">
+                    Широкоформатна продукція
+                </h2>
+                <h2 className="w-[140px] flex flex-col items-center justify-center text-center">
+                    Послуги
+                </h2>
+                <h2 className="w-[60px] flex flex-col items-center justify-center text-center">
+                    Блог
+                </h2>
+                <h2 className="w-[130px] flex flex-col items-center justify-center text-center">
+                    Підтримка
+                </h2>
+                <h2 className="w-[130px] flex flex-col items-center justify-center text-center">
+                    Контакти
+                </h2>
+            </div>
+        </div>
     );
 };

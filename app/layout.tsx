@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
 
 export default function RootLayout({
   children,
@@ -17,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className="flex items-center justify-center min-h-screen bg-secondary"
+        className="flex flex-col items-center justify-center min-h-screen bg-secondary"
       >
         <ThemeProvider
           attribute="class"
@@ -26,7 +27,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Navbar />
-          {children}
+          <main className="flex flex-col w-full">{children}</main>
+          <Footer />
         </ThemeProvider>
       </body>
     </html >
