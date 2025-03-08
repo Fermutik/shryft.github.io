@@ -1,5 +1,5 @@
 import { ModeToggle } from "@/components/mode-toogle";
-import SvgLogo from "@/components/logo";
+import Logo from "@/components/icons/logo";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -10,7 +10,7 @@ export const Navbar = () => {
             <div className="flex h-[130px] justify-between items-center">
                 <div className="flex items-center space-x-4 ml-[210px]">
                     <Link href={"/"} className="h-fit w-fit">
-                        <SvgLogo className="w-[110px] h-[90px]" />
+                        <Logo className="w-[110px] h-[90px]" />
                     </Link>
                     <img src="https://placehold.co/500x110/cccccc/ffffff?Image+Placeholder" alt="Placeholder" />
                     <img src="https://placehold.co/155x110/cccccc/ffffff?Image+Placeholder" alt="Placeholder" />
@@ -20,7 +20,7 @@ export const Navbar = () => {
                     <ModeToggle />
                 </div>
             </div>
-            <div className="w-full h-[50px] bg-black text-white flex flex-row items-center justify-start">
+            <div className="w-full h-[50px] bg-black dark:bg-white text-white dark:text-black flex flex-row items-center justify-start">
                 <div className="w-[210px]"></div>
                 <h2 className="w-[200px] flex flex-col items-center justify-center text-center leading-tight">
                     Малоформатна продукція

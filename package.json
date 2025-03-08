@@ -19,6 +19,7 @@
     "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-separator": "^1.1.2",
     "@radix-ui/react-slot": "^1.1.2",
+    "@react-input/mask": "^2.0.4",
     "@types/mdx": "^2.0.13",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

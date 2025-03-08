@@ -4,7 +4,7 @@ import Image from "next/image";
 export const Footer = () => {
     return (
         <div className="flex flex-col w-full">
-            <div className="h-[50px] bg-black text-white flex items-center justify-center">
+            <div className="h-[50px] bg-black dark:bg-white text-white dark:text-black flex items-center justify-center">
                 <h2 className="text-center text-xl">Усі види поліграфічних послуг зі швидкою доставкою по Україні</h2>
             </div>
 
