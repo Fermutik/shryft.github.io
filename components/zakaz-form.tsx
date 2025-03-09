@@ -79,6 +79,12 @@ export const ZakazForm = ({ t, lang }: BasePageProps) => {
         setSelectedFile(null)
     }
 
+    // Reset handler: очистка формы и сброс выбранного файла
+    const handleReset = () => {
+        form.reset()
+        setSelectedFile(null)
+    }
+
     const { isSubmitting, isValid } = form.formState
 
     return (
@@ -147,15 +153,19 @@ export const ZakazForm = ({ t, lang }: BasePageProps) => {
                                 <Button disabled={!isValid || isSubmitting} type="submit">
                                     {t("Submit")}
                                 </Button>
-                                <Button
-                                    type="button"
-                                    onClick={() => fileInputRef.current?.click()}
-                                >
+                                <Button type="button" onClick={() => fileInputRef.current?.click()}>
                                     {t("SelectFile")}
                                 </Button>
-                                <div className="flex justify-center items-center w-[24px]">
+                                <Button type="button" onClick={handleReset}>
+                                    {t("Reset")}
+                                </Button>
+                                <div
+                                    className="flex justify-center items-center w-[24px]"
+                                    title={selectedFile ? selectedFile.name : ""}
+                                >
                                     {selectedFile && <Attach />}
                                 </div>
+
                             </div>
                         </div>
 
@@ -200,6 +210,6 @@ export const ZakazForm = ({ t, lang }: BasePageProps) => {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </div>
+        </div >
     )
 }

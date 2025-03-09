@@ -10,8 +10,6 @@ export function getT(lang: string, namespace: string) {
 
   // Return a function that retrieves the value by key
   return (key: string) => {
-    // Optional: Log the key and returned value for debugging
-    console.log(`Retrieving key "${key}" from ${lang}/${namespace}:`, translations[key]);
     return translations[key];
   };
 }
