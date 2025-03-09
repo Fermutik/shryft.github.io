@@ -7,8 +7,7 @@ export const metadata: Metadata = {
 }
 
 import { ThemeProvider } from "@/components/theme-provider";
-import { Navbar } from "@/components/navbar";
-import { Footer } from "@/components/footer";
+import LanguageSwitcher from "@/components/language-switcher";
 
 export default function RootLayout({
   children,
@@ -20,13 +19,16 @@ export default function RootLayout({
       <body className="flex flex-col items-center justify-center min-h-screen bg-secondary">
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="light"
+          enableSystem={false}
           disableTransitionOnChange
         >
-          <Navbar />
-          <main className="flex flex-col w-full">{children}</main>
-          <Footer />
+          <main className="relative w-full">
+            <div className="absolute top-4 right-4 z-50">
+              <LanguageSwitcher />
+            </div>
+            {children}
+          </main>
         </ThemeProvider>
       </body>
     </html>

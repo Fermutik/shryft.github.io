@@ -32,25 +32,30 @@ import { Textarea } from "@/components/ui/textarea"
 // Import custom PhoneInput component that uses @react-input/mask and shadcn's Input
 import PhoneInput from "@/components/phone-input"
 
-// Zod schema with phone validation: ensure that the phone input is fully filled
-const formSchema = z.object({
-    email: z.string().email({
-        message: "Невірна адреса електронної пошти",
-    }),
-    username: z.string().min(1).max(50),
-    tel: z.string().length(17, { message: "Невірний номер телефону" }),
-    comment: z.string().max(500),
-})
+import { BasePageProps } from "@/app/_page"
+import { getT } from "@/lib/utils"
 
-export const ZakazForm = () => {
+export const ZakazForm = ({ t, lang }: BasePageProps) => {
+    // Get translation function for the "zakaz-form" namespace
+    t = getT(lang, "zakaz-form")
+
+    // Define form schema using translations for validation messages.
+    // The schema is defined inside the component so that t() is available.
+    const formSchema = z.object({
+        email: z.string().email({ message: t("InvalidEmail") }),
+        username: z.string().min(1).max(50),
+        tel: z.string().length(17, { message: t("InvalidPhone") }),
+        comment: z.string().max(500),
+    })
+
     // Initialize React Hook Form with Zod validation
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             email: "",
-            tel: "",      // default phone is empty
+            tel: "",
             username: "",
-            comment: ""
+            comment: "",
         },
     })
 
@@ -61,16 +66,14 @@ export const ZakazForm = () => {
     // Ref for the hidden file input element
     const fileInputRef = useRef<HTMLInputElement>(null)
 
-    // File input change handler: update state with the selected file and log for debugging
+    // File input change handler: update state with the selected file
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0] || null
         setSelectedFile(file)
-        console.log("File selected:", file)
     }
 
-    // Form submit handler: log form values and selected file, open the alert dialog, and reset the form
+    // Form submit handler: open the alert dialog and reset the form
     function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log("Form submitted with:", values, "Selected file:", selectedFile)
         setAlertOpen(true)
         form.reset()
         setSelectedFile(null)
@@ -94,7 +97,7 @@ export const ZakazForm = () => {
                                     <FormItem>
                                         <FormControl>
                                             <Input
-                                                placeholder="Ім'я"
+                                                placeholder={t("Name")}
                                                 {...field}
                                                 disabled={isSubmitting}
                                             />
@@ -130,7 +133,7 @@ export const ZakazForm = () => {
                                             <FormControl>
                                                 <Input
                                                     className="w-full"
-                                                    placeholder="Ваш email"
+                                                    placeholder={t("Email")}
                                                     {...field}
                                                     disabled={isSubmitting}
                                                 />
@@ -141,19 +144,17 @@ export const ZakazForm = () => {
                                 />
                             </div>
                             <div className="flex flex-row w-full space-x-2">
-                                <Button
-                                    disabled={!isValid || isSubmitting}
-                                    type="submit"
-                                >
-                                    Відправити
+                                <Button disabled={!isValid || isSubmitting} type="submit">
+                                    {t("Submit")}
                                 </Button>
-                                <Button type="button" onClick={() => fileInputRef.current?.click()}>
-                                    Вибрати файл
+                                <Button
+                                    type="button"
+                                    onClick={() => fileInputRef.current?.click()}
+                                >
+                                    {t("SelectFile")}
                                 </Button>
                                 <div className="flex justify-center items-center w-[24px]">
-                                    {selectedFile && (
-                                        <Attach />
-                                    )}
+                                    {selectedFile && <Attach />}
                                 </div>
                             </div>
                         </div>
@@ -166,7 +167,7 @@ export const ZakazForm = () => {
                                     <FormItem>
                                         <FormControl>
                                             <Textarea
-                                                placeholder="Повідомлення"
+                                                placeholder={t("Message")}
                                                 wrap="soft"
                                                 className="w-[176px] resize-none h-22 overflow-y-scroll box-border"
                                                 {...field}
@@ -189,10 +190,8 @@ export const ZakazForm = () => {
             <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Дякуємо!</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            Дякуємо за Ваш запит! Наш менеджер зв'яжеться з Вами найближчим часом для обговорення деталей та узгодження подальших кроків.
-                        </AlertDialogDescription>
+                        <AlertDialogTitle>{t("Thanks")}</AlertDialogTitle>
+                        <AlertDialogDescription>{t("Acknowledgment")}</AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogAction onClick={() => setAlertOpen(false)}>

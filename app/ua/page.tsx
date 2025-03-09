@@ -5,7 +5,7 @@ import BasePage from "../_page";
 import { getT } from "@/lib/utils";
 
 export default function Home() {
-  const lang = 'uk';
+  const lang = 'ua';
   const t = getT(lang, "home");
 
   return (

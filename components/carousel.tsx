@@ -9,7 +9,11 @@ import {
     CarouselPrevious,
 } from "@/components/ui/carousel"
 
-export function CarouselSize() {
+import { BasePageProps } from "@/app/_page"
+import { getT } from "@/lib/utils";
+
+export function CarouselSize({ t, lang }: BasePageProps) {
+    t = getT(lang, "carousel");
     return (
         <Carousel
             opts={{

@@ -1,14 +1,14 @@
 {
     "locales": [
-        "uk",
+        "ua",
         "ru"
     ],
-    "defaultLocale": "uk",
+    "defaultLocale": "ua",
     "pages": {
         "*": [
             "common"
         ],
-        "/uk": [
+        "/ua": [
             "home"
         ]
     }
