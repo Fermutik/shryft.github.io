@@ -1,6 +1,7 @@
 import { ModeToggle } from "@/components/mode-toogle";
 import Logo from "@/components/icons/logo";
 import Image from "next/image";
+import LanguageSwitcher from "./language-switcher";
 import Link from "next/link";
 
 // Navbar component fixed at the top with the title on the left and the toggle on the right.
@@ -16,8 +17,11 @@ export const Navbar = () => {
                     <img src="https://placehold.co/155x110/cccccc/ffffff?Image+Placeholder" alt="Placeholder" />
                 </div>
                 <div className="mr-4 flex space-x-4 ml-[210px] mt-[10px] self-start">
+
                     <img src="https://placehold.co/70x36/cccccc/ffffff?Image+Placeholder" alt="Placeholder" />
+                    <LanguageSwitcher />
                     <ModeToggle />
+
                 </div>
             </div>
             <div className="w-full h-[50px] bg-black dark:bg-white text-white dark:text-black flex flex-row items-center justify-start">

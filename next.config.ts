@@ -10,7 +10,6 @@ const nextConfig: NextConfig = {
         hostname: "placehold.co",
         port: "",
         pathname: "/**",
-        search: "?*",
       },
     ],
   },

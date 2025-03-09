@@ -1,0 +1,15 @@
+{
+    "locales": [
+        "uk",
+        "ru"
+    ],
+    "defaultLocale": "uk",
+    "pages": {
+        "*": [
+            "common"
+        ],
+        "/uk": [
+            "home"
+        ]
+    }
+}
