@@ -41,21 +41,29 @@ function AccordionPublic({
   );
 }
 
-function AccordionTrigger(
-  props: React.ComponentProps<typeof AccordionPrimitive.Trigger>
-) {
+interface AccordionTriggerProps extends React.ComponentProps<typeof AccordionPrimitive.Trigger> {
+  collapsedLabel?: string;
+  expandedLabel?: string;
+}
+
+function AccordionTrigger({
+  collapsedLabel = "Читати далі",
+  expandedLabel = "Закрити",
+  className,
+  ...props
+}: AccordionTriggerProps) {
   return (
     <AccordionPrimitive.Header className="">
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
           "group focus-visible:border-ring pb-4 pt-2 focus-visible:ring-ring/50 flex flex-1 items-start justify-between gap-4 rounded-md text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>svg]:rotate-180",
-          props.className
+          className
         )}
         {...props}
       >
-        <span className="group-data-[state=open]:hidden">Читати далі</span>
-        <span className="hidden group-data-[state=open]:inline">Закрити</span>
+        <span className="group-data-[state=open]:hidden">{collapsedLabel}</span>
+        <span className="hidden group-data-[state=open]:inline">{expandedLabel}</span>
         <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200" />
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>

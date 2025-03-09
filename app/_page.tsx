@@ -83,7 +83,7 @@ export default function BasePage({ t, lang }: BasePageProps) {
                             <AccordionHide>
                                 <ZakazHide />
                             </AccordionHide>
-                            <AccordionTrigger />
+                            <AccordionTrigger collapsedLabel={t("readMore")} expandedLabel={t("close")} />
                         </AccordionItem>
                     </Accordion>
                     <Separator className="mb-4" />
@@ -100,7 +100,7 @@ export default function BasePage({ t, lang }: BasePageProps) {
                             <AccordionHide>
                                 <ZakazHide />
                             </AccordionHide>
-                            <AccordionTrigger />
+                            <AccordionTrigger collapsedLabel={t("readMore")} expandedLabel={t("close")} />
                         </AccordionItem>
                     </Accordion>
                 </div>
