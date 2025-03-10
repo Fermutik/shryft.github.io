@@ -47,11 +47,11 @@ export default function BasePage({ t, lang }: BasePageProps) {
         <div className="flex flex-col justify-center items-center">
             <Navbar t={t} lang={lang} />
             <div className="flex flex-row justify-start">
-                <div className="flex-col items-center text-center mt-22 hidden lg:block px-8">
+                <div className="flex-col items-center text-center mt-12 hidden lg:block px-8">
                     <Image
-                        src="/notepad.png"
-                        width={190}
-                        height={260}
+                        src="/notebook.png"
+                        width={380}
+                        height={504}
                         alt="Picture of the author"
                     />
                 </div>
