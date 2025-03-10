@@ -118,12 +118,10 @@
 
   h2 {
     font-family: var(--font-montserrat-alternates);
-    font-size: 16px;
   }
 
   h1 {
     font-family: var(--font-montserrat-alternates);
-    font-size: 28px;
     font-weight: 700;
   }
 }

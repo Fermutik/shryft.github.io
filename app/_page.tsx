@@ -44,10 +44,10 @@ export default function BasePage({ t, lang }: BasePageProps) {
     const ZakazHide = lang === 'ua' ? ZakazHideUa : ZakazHideRu;
 
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col justify-center items-center">
             <Navbar t={t} lang={lang} />
-            <div className="flex flex-row w-[797px] ml-[210px] justify-between">
-                <div className="flex flex-col text-center mt-22">
+            <div className="flex flex-row justify-start">
+                <div className="flex-col items-center text-center mt-22 hidden lg:block px-8">
                     <Image
                         src="/notepad.png"
                         width={190}
@@ -56,8 +56,8 @@ export default function BasePage({ t, lang }: BasePageProps) {
                     />
                 </div>
                 <div className="ml-[10px] mt-2">
-                    <h1>Блокноти</h1>
-                    <Breadcrumb>
+                    <h1 className="text-2xl lg:text-3xl">Блокноти</h1>
+                    <Breadcrumb className="text-xs lg:text-sm">
                         <BreadcrumbList>
                             <BreadcrumbItem>
                                 <BreadcrumbLink href={"/" + lang}>ГОЛОВНА</BreadcrumbLink>
@@ -72,7 +72,7 @@ export default function BasePage({ t, lang }: BasePageProps) {
                             </BreadcrumbItem>
                         </BreadcrumbList>
                     </Breadcrumb>
-                    <h2 className="scroll-m-20 text-xl mt-4 font-bold mb-2">
+                    <h2 className="scroll-m-20 text-xl lg:text-2xl mt-4 font-bold mb-2">
                         {t("orderNotebooksTitle")}
                     </h2>
                     <Accordion type="single" collapsible>
@@ -87,7 +87,7 @@ export default function BasePage({ t, lang }: BasePageProps) {
                         </AccordionItem>
                     </Accordion>
                     <Separator className="mb-4" />
-                    <h2 className="scroll-m-20 text-xl font-bold mb-2">
+                    <h2 className="scroll-m-20 text-xl lg:text-2xl font-bold mb-2">
                         {t("orderNotebooksPrintTitle")}
                     </h2>
                     <ZakazForm t={t} lang={lang} />
@@ -105,8 +105,8 @@ export default function BasePage({ t, lang }: BasePageProps) {
                     </Accordion>
                 </div>
             </div>
-            <div className="flex flex-col w-[797px] ml-[210px] mt-2">
-                <h2 className="scroll-m-20 text-xl font-bold mx-2 mb-2">
+            <div className="flex-col justify-start mt-2 hidden xl:block">
+                <h2 className="scroll-m-20 text-2xl font-bold mx-2 mb-2">
                     {t("alsoWeDo")}
                 </h2>
                 <CarouselSize t={t} lang={lang} />

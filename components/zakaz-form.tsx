@@ -27,6 +27,11 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+} from "@/components/ui/hover-card"
 import { Textarea } from "@/components/ui/textarea"
 
 // Import custom PhoneInput component that uses @react-input/mask and shadcn's Input
@@ -92,18 +97,53 @@ export const ZakazForm = ({ t, lang }: BasePageProps) => {
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className="flex flex-col items-start w-full"
+                    className="flex flex-col items-start w-full space-x-2"
                 >
-                    <div className="flex flex-row w-full space-x-2">
-                        <div className="flex flex-col space-y-4 w-[360px]">
+                    <div className="flex flex-col space-y-4 w-full">
+                        <FormField
+                            control={form.control}
+                            name="username"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <Input
+                                            placeholder={t("Name")}
+                                            {...field}
+                                            disabled={isSubmitting}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <div className="flex flex-row space-x-2">
                             <FormField
                                 control={form.control}
-                                name="username"
+                                name="tel"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <PhoneInput
+                                                placeholder="+38(___)___-__-__"
+                                                className="w-full"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="email"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormControl>
                                             <Input
-                                                placeholder={t("Name")}
+                                                className="w-full"
+                                                placeholder={t("Email")}
                                                 {...field}
                                                 disabled={isSubmitting}
                                             />
@@ -112,61 +152,6 @@ export const ZakazForm = ({ t, lang }: BasePageProps) => {
                                     </FormItem>
                                 )}
                             />
-
-                            <div className="flex flex-row space-x-2">
-                                <FormField
-                                    control={form.control}
-                                    name="tel"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormControl>
-                                                <PhoneInput
-                                                    placeholder="+38(___)___-__-__"
-                                                    className="w-full"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-
-                                <FormField
-                                    control={form.control}
-                                    name="email"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormControl>
-                                                <Input
-                                                    className="w-full"
-                                                    placeholder={t("Email")}
-                                                    {...field}
-                                                    disabled={isSubmitting}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
-                            <div className="flex flex-row w-full space-x-2">
-                                <Button disabled={!isValid || isSubmitting} type="submit">
-                                    {t("Submit")}
-                                </Button>
-                                <Button type="button" onClick={() => fileInputRef.current?.click()}>
-                                    {t("SelectFile")}
-                                </Button>
-                                <Button type="button" onClick={handleReset}>
-                                    {t("Reset")}
-                                </Button>
-                                <div
-                                    className="flex justify-center items-center w-[24px]"
-                                    title={selectedFile ? selectedFile.name : ""}
-                                >
-                                    {selectedFile && <Attach />}
-                                </div>
-
-                            </div>
                         </div>
 
                         <div className="flex flex-col">
@@ -179,7 +164,7 @@ export const ZakazForm = ({ t, lang }: BasePageProps) => {
                                             <Textarea
                                                 placeholder={t("Message")}
                                                 wrap="soft"
-                                                className="w-[176px] resize-none h-22 overflow-y-scroll box-border"
+                                                className="h-22 overflow-y-scroll box-border"
                                                 {...field}
                                             />
                                         </FormControl>
@@ -188,7 +173,31 @@ export const ZakazForm = ({ t, lang }: BasePageProps) => {
                                 )}
                             />
                         </div>
+                        <div className="flex flex-row w-full space-x-2 mt-2">
+                            <Button disabled={!isValid || isSubmitting} type="submit">
+                                {t("Submit")}
+                            </Button>
+                            <Button type="button" onClick={() => fileInputRef.current?.click()}>
+                                {t("SelectFile")}
+                            </Button>
+                            <Button type="button" onClick={handleReset}>
+                                {t("Reset")}
+                            </Button>
+                            {selectedFile && (
+                                <HoverCard>
+                                    <HoverCardTrigger asChild>
+                                        <Button type="button" variant="link">
+                                            <Attach />
+                                        </Button>
+                                    </HoverCardTrigger>
+                                    <HoverCardContent>
+                                        {selectedFile.name}
+                                    </HoverCardContent>
+                                </HoverCard>
+                            )}
+                        </div>
                     </div>
+
                     <input
                         type="file"
                         ref={fileInputRef}

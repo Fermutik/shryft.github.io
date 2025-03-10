@@ -24,7 +24,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <main className="relative w-full">
-            <div className="absolute top-4 right-4 z-50">
+            <div className="absolute right-4 z-50 hidden xl:block">
               <LanguageSwitcher />
             </div>
             {children}

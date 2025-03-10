@@ -7,19 +7,16 @@ export const Footer = ({ t, lang }: BasePageProps) => {
     t = getT(lang, "footer");
     return (
         <div className="flex flex-col w-full">
-            <div className="h-[50px] bg-black dark:bg-white text-white dark:text-black flex items-center justify-center">
-                <h2 className="text-center text-xl">{t("title")}</h2>
+            <div className="flex h-[50px] text-sm lg:text-lg bg-black dark:bg-white text-white dark:text-black items-center justify-center">
+                <h2 className="text-center text-lg">{t("title")}</h2>
             </div>
 
-            <div className="flex h-[225px] justify-between items-center">
-                <div className="flex items-center space-x-4 ml-[210px]">
-                    <div className="w-[270px]">
-                        <img src="https://placehold.co/155x110/cccccc/ffffff?Image+Placeholder" alt="Placeholder" />
-                    </div>
-                    <div>
-                        <img src="https://placehold.co/510x155/cccccc/ffffff?Image+Placeholder" alt="Placeholder" />
-                    </div>
-
+            <div className="flex h-[225px] justify-center items-center gap-x-16">
+                <div className="hidden md:block">
+                    <img src="https://placehold.co/155x110/cccccc/ffffff?Image+Placeholder" alt="Placeholder" />
+                </div>
+                <div>
+                    <img src="https://placehold.co/510x155/cccccc/ffffff?Image+Placeholder" alt="Placeholder" />
                 </div>
             </div>
         </div>
