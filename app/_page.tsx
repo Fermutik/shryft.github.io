@@ -78,7 +78,7 @@ export default function BasePage({ t, lang }: BasePageProps, { title, form, imag
         <div className="flex flex-col justify-center items-center">
             <Navbar t={t} lang={lang} />
             <div className="flex flex-row justify-start">
-                <div className="flex-col items-center text-center mt-8 hidden lg:block px-8">
+                <div className="flex-col items-center text-center mt-20 hidden lg:block px-8">
                     {image ? (
                         // When 'image' is true, render the custom Image component
                         <Image
@@ -98,9 +98,9 @@ export default function BasePage({ t, lang }: BasePageProps, { title, form, imag
                         ) : (
                             // When 'image' is false, render the standard HTML <img> element
                             <img
-                                src="https://placehold.co/380x500/cccccc/ffffff?Image+Placeholder"
-                                width="380"
-                                height="500"
+                                src="https://placehold.co/350x400/cccccc/ffffff?Image+Placeholder"
+                                width="350"
+                                height="400"
                                 alt={t_menu(title)}
                             />
                         )
