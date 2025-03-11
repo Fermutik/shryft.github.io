@@ -28,10 +28,11 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import {
-    HoverCard,
-    HoverCardContent,
-    HoverCardTrigger,
-} from "@/components/ui/hover-card"
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { Textarea } from "@/components/ui/textarea"
 
 // Import custom PhoneInput component that uses @react-input/mask and shadcn's Input
@@ -48,10 +49,13 @@ export const ZakazForm = ({ t, lang }: BasePageProps) => {
     // The schema is defined inside the component so that t() is available.
     const formSchema = z.object({
         email: z.string().email({ message: t("InvalidEmail") }),
-        username: z.string().min(1).max(50),
+        username: z
+            .string()
+            .min(1, { message: t("UsernameRequired") })
+            .max(50, { message: t("UsernameTooLong") }),
         tel: z.string().length(17, { message: t("InvalidPhone") }),
-        comment: z.string().max(500),
-    })
+        comment: z.string().max(500, { message: t("CommentTooLong") })
+    });
 
     // Initialize React Hook Form with Zod validation
     const form = useForm<z.infer<typeof formSchema>>({
@@ -108,6 +112,7 @@ export const ZakazForm = ({ t, lang }: BasePageProps) => {
                                     <FormControl>
                                         <Input
                                             placeholder={t("Name")}
+                                            className="bg-background"
                                             {...field}
                                             disabled={isSubmitting}
                                         />
@@ -126,7 +131,7 @@ export const ZakazForm = ({ t, lang }: BasePageProps) => {
                                         <FormControl>
                                             <PhoneInput
                                                 placeholder="+38(___)___-__-__"
-                                                className="w-full"
+                                                className="w-full bg-background"
                                                 {...field}
                                             />
                                         </FormControl>
@@ -142,7 +147,7 @@ export const ZakazForm = ({ t, lang }: BasePageProps) => {
                                     <FormItem>
                                         <FormControl>
                                             <Input
-                                                className="w-full"
+                                                className="w-full bg-background"
                                                 placeholder={t("Email")}
                                                 {...field}
                                                 disabled={isSubmitting}
@@ -164,7 +169,7 @@ export const ZakazForm = ({ t, lang }: BasePageProps) => {
                                             <Textarea
                                                 placeholder={t("Message")}
                                                 wrap="soft"
-                                                className="h-22 overflow-y-scroll box-border"
+                                                className="bg-background h-22 overflow-y-scroll box-border"
                                                 {...field}
                                             />
                                         </FormControl>
@@ -174,26 +179,25 @@ export const ZakazForm = ({ t, lang }: BasePageProps) => {
                             />
                         </div>
                         <div className="flex flex-row w-full space-x-2 mt-2">
-                            <Button disabled={!isValid || isSubmitting} type="submit">
+                            <Button type="submit">
                                 {t("Submit")}
                             </Button>
-                            <Button type="button" onClick={() => fileInputRef.current?.click()}>
+                            <Button variant="outline" type="button" onClick={() => fileInputRef.current?.click()}>
                                 {t("SelectFile")}
                             </Button>
-                            <Button type="button" onClick={handleReset}>
+                            <Button variant="outline" type="button" onClick={handleReset}>
                                 {t("Reset")}
                             </Button>
                             {selectedFile && (
-                                <HoverCard>
-                                    <HoverCardTrigger asChild>
-                                        <Button type="button" variant="link">
-                                            <Attach />
-                                        </Button>
-                                    </HoverCardTrigger>
-                                    <HoverCardContent>
-                                        {selectedFile.name}
-                                    </HoverCardContent>
-                                </HoverCard>
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger><Attach /></TooltipTrigger>
+                                        <TooltipContent>
+                                            <p> {selectedFile.name}</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+
                             )}
                         </div>
                     </div>

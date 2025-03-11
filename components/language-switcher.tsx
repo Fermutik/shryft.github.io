@@ -46,7 +46,7 @@ const LanguageSwitcher = () => {
                     {index > 0 && ' | '}
                     <Link href={createLocalePath(locale)} passHref>
                         {/* Underline the current active locale */}
-                        <span className={locale === activeLocale ? 'underline' : ''}>
+                        <span className={locale === activeLocale ? 'text-primary' : ''}>
                             {locale.toUpperCase()}
                         </span>
                     </Link>

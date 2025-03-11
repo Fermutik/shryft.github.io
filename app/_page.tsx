@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Slash } from "lucide-react"
 
 // UI components imports (shared)
 import {
@@ -47,7 +48,7 @@ export default function BasePage({ t, lang }: BasePageProps) {
         <div className="flex flex-col justify-center items-center">
             <Navbar t={t} lang={lang} />
             <div className="flex flex-row justify-start">
-                <div className="flex-col items-center text-center mt-12 hidden lg:block px-8">
+                <div className="flex-col items-center text-center mt-8 hidden lg:block px-8">
                     <Image
                         src="/notebook.png"
                         width={380}
@@ -57,24 +58,26 @@ export default function BasePage({ t, lang }: BasePageProps) {
                 </div>
                 <div className="ml-[10px] mt-2">
                     <h1 className="text-2xl lg:text-3xl">Блокноти</h1>
-                    <Breadcrumb className="text-xs lg:text-sm">
+                    <Breadcrumb className="text-xs lg:text-sm mb-4">
                         <BreadcrumbList>
                             <BreadcrumbItem>
                                 <BreadcrumbLink href={"/" + lang}>ГОЛОВНА</BreadcrumbLink>
                             </BreadcrumbItem>
-                            <BreadcrumbSeparator />
+                            <BreadcrumbSeparator>
+                                <Slash />
+                            </BreadcrumbSeparator>
                             <BreadcrumbItem>
-                                <BreadcrumbLink href={"/" + lang}>ПОСЛУГИ</BreadcrumbLink>
+                                МАЛОФОРМАТНА ПРОДУКЦІЯ
                             </BreadcrumbItem>
-                            <BreadcrumbSeparator />
-                            <BreadcrumbItem>
+                            <BreadcrumbSeparator>
+                                <Slash />
+                            </BreadcrumbSeparator>
+                            <BreadcrumbPage>
                                 БЛОКНОТИ
-                            </BreadcrumbItem>
+                            </BreadcrumbPage>
                         </BreadcrumbList>
                     </Breadcrumb>
-                    <h2 className="scroll-m-20 text-xl lg:text-2xl mt-4 font-bold mb-2">
-                        {t("orderNotebooksTitle")}
-                    </h2>
+                    <Separator className="mb-4" />
                     <Accordion type="single" collapsible>
                         <AccordionItem value="item-1">
                             <AccordionPublic className="dark:text-gray-200">
@@ -86,7 +89,6 @@ export default function BasePage({ t, lang }: BasePageProps) {
                             <AccordionTrigger collapsedLabel={t("readMore")} expandedLabel={t("close")} />
                         </AccordionItem>
                     </Accordion>
-                    <Separator className="mb-4" />
                     <h2 className="scroll-m-20 text-xl lg:text-2xl font-bold mb-2">
                         {t("orderNotebooksPrintTitle")}
                     </h2>
