@@ -8,7 +8,7 @@ export const Footer = ({ t, lang }: BasePageProps) => {
     return (
         <div className="flex flex-col w-full">
             <div className="flex h-[50px] text-sm lg:text-lg bg-black dark:bg-white text-white dark:text-black items-center justify-center">
-                <h2 className="text-center text-lg">{t("title")}</h2>
+                <h2 className="text-center">{t("title")}</h2>
             </div>
 
             <div className="flex h-[225px] justify-center items-center gap-x-16">
