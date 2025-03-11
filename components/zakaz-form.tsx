@@ -182,11 +182,11 @@ export const ZakazForm = ({ t, lang }: BasePageProps) => {
                             <Button type="submit">
                                 {t("Submit")}
                             </Button>
-                            <Button variant="outline" type="button" onClick={() => fileInputRef.current?.click()}>
-                                {t("SelectFile")}
-                            </Button>
                             <Button variant="outline" type="button" onClick={handleReset}>
                                 {t("Reset")}
+                            </Button>
+                            <Button variant="outline" type="button" onClick={() => fileInputRef.current?.click()}>
+                                {t("SelectFile")}
                             </Button>
                             {selectedFile && (
                                 <TooltipProvider>
