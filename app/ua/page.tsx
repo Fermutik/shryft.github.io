@@ -1,17 +1,14 @@
 "use client";
 
-import React from "react";
-import BasePage from "../_page";
+import BasePage from "../_home";
 import { getT } from "@/lib/utils";
 
 export default function Home() {
   const lang = 'ua';
   const t = getT(lang, "home");
 
-  return (
-    <BasePage
-      t={t}
-      lang={lang}
-    />
+  return BasePage(
+    { t, lang },
+    { title: "home", form: true }
   );
 }

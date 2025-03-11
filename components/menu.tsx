@@ -20,7 +20,7 @@ import { MenuIcon } from "@/components/lucid_icons"
 
 // Updated arrays with English titles based on the provided JSON mapping
 
-const smallFormatItems = [
+export const smallFormatItems = [
     { title: "presentations", href: "/small-format/presentations" },
     { title: "brochures", href: "/small-format/brochures" },
     { title: "architectural-projects", href: "/small-format/architectural-projects" },
@@ -47,7 +47,7 @@ const smallFormatItems = [
     { title: "shaped-paper-products", href: "/small-format/shaped-paper-products" },
 ];
 
-const largeFormatItems = [
+export const largeFormatItems = [
     { title: "drawings", href: "/large-format/drawings" },
     { title: "tablets", href: "/large-format/tablets" },
     { title: "tracing-paper-print", href: "/large-format/tracing-paper-print" },
@@ -61,7 +61,7 @@ const largeFormatItems = [
     { title: "roll-up-banner", href: "/large-format/roll-up-banner" },
 ];
 
-const servicesItems = [
+export const servicesItems = [
     { title: "color-print", href: "/services/color-print" },
     { title: "black-and-white-print", href: "/services/black-and-white-print" },
     { title: "large-format-print", href: "/services/large-format-print" },
@@ -78,7 +78,7 @@ const servicesItems = [
     { title: "selection", href: "/services/selection" },
 ];
 
-const supportItems = [
+export const supportItems = [
     { title: "how-to-order", href: "/support/how-to-order" },
     { title: "get-a-quote", href: "/support/get-a-quote" },
     { title: "design-requirements", href: "/support/design-requirements" },
@@ -94,11 +94,12 @@ export function SiteNavigationMenu({ t, lang }: BasePageProps) {
         <NavigationMenu className="hidden lg:block">
             <NavigationMenuList>
                 <NavigationMenuItem>
-                    <NavigationMenuTrigger className="dark font-montserrat-alternates leading-none text-sm lg:text-lg">
-                        {t("smallFormat")}
+                    <NavigationMenuTrigger className="dark font-montserrat-alternates leading-none text-sm lg:text-base">
+                        <MenuIcon menuKey={"small-format" as any} className="w-5 h-5 mr-2" />
+                        {t("small-format")}
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
-                        <ul className="grid gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] lg:grid-cols-3">
+                        <ul className="grid gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[630px] lg:grid-cols-3">
                             {smallFormatItems.map((item) => (
                                 <ListItem className="text-lg" key={item.title} iconKey={item.title} title={t(item.title)} href={"/" + lang + item.href}>
                                 </ListItem>
@@ -108,8 +109,9 @@ export function SiteNavigationMenu({ t, lang }: BasePageProps) {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                    <NavigationMenuTrigger className="dark font-montserrat-alternates leading-none text-sm lg:text-lg">
-                        {t("largeFormat")}
+                    <NavigationMenuTrigger className="dark font-montserrat-alternates leading-none text-sm lg:text-base">
+                        <MenuIcon menuKey={"large-format" as any} className="w-5 h-5 mr-2" />
+                        {t("large-format")}
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
                         <ul className="grid w-[450px] gap-3 p-4 md:w-[510px] md:grid-cols-2 lg:w-[630px] lg:grid-cols-2">
@@ -122,9 +124,11 @@ export function SiteNavigationMenu({ t, lang }: BasePageProps) {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                    <NavigationMenuTrigger className="dark font-montserrat-alternates leading-none text-sm lg:text-lg">{t("services")}</NavigationMenuTrigger>
+                    <NavigationMenuTrigger className="dark font-montserrat-alternates leading-none text-sm lg:text-base">
+                        <MenuIcon menuKey={"services" as any} className="w-5 h-5 mr-2" />
+                        {t("services")}</NavigationMenuTrigger>
                     <NavigationMenuContent>
-                        <ul className="grid w-[550px] gap-3 p-4 md:w-[630px] md:grid-cols-2 lg:w-[770px] ">
+                        <ul className="grid w-[550px] gap-3 p-4 md:w-[630px] md:grid-cols-2 lg:w-[755px] ">
                             {servicesItems.map((item) => (
                                 <ListItem key={item.title} iconKey={item.title} title={t(item.title)} href={"/" + lang + item.href} />
                             ))}
@@ -133,9 +137,11 @@ export function SiteNavigationMenu({ t, lang }: BasePageProps) {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                    <NavigationMenuTrigger className="dark font-montserrat-alternates leading-none text-sm lg:text-lg">{t("support")}</NavigationMenuTrigger>
+                    <NavigationMenuTrigger className="dark font-montserrat-alternates leading-none text-sm lg:text-base">
+                        <MenuIcon menuKey={"support" as any} className="w-5 h-5 mr-2" />
+                        {t("support")}</NavigationMenuTrigger>
                     <NavigationMenuContent>
-                        <ul className="grid w-[700px] gap-3 p-4 md:w-[770px] md:grid-cols-2 lg:w-[930px]">
+                        <ul className="grid w-[700px] gap-3 p-4 md:w-[770px] md:grid-cols-2 lg:w-[915px]">
                             {supportItems.map((item) => (
                                 <ListItem
                                     key={item.title}
@@ -150,8 +156,11 @@ export function SiteNavigationMenu({ t, lang }: BasePageProps) {
 
                 <NavigationMenuItem className="dark font-montserrat-alternates leading-none ">
                     <Link href={"/" + lang + "/contacts"} legacyBehavior passHref>
-                        <NavigationMenuLink className={navigationMenuTriggerStyle() + "text-sm lg:text-lg"}>
-                            {t("contacts")}
+                        <NavigationMenuLink className={navigationMenuTriggerStyle() + "text-sm lg:text-base"}>
+                            <div className="flex items-center font-medium text-sm lg:text-base">
+                                <MenuIcon menuKey={"contacts" as any} className="w-5 h-5 mr-2 text-accent-foreground" />
+                                {t("contacts")}
+                            </div>
                         </NavigationMenuLink>
                     </Link>
                 </NavigationMenuItem>
@@ -184,8 +193,14 @@ const ListItem = React.forwardRef<
                     {...props}
                 >
                     <div className="flex items-center space-x-2">
-                        {/* Render the icon next to the title if available */}
-                        {iconKey && <MenuIcon menuKey={iconKey as any} className="w-4 h-4" />}
+                        {/* Render the icon next to the title if available.
+                Added 'flex-shrink-0' to ensure the icon maintains its size even if the title wraps. */}
+                        {iconKey && (
+                            <MenuIcon
+                                menuKey={iconKey as any}
+                                className="w-4 h-4 flex-shrink-0"
+                            />
+                        )}
                         <div className="text-sm font-bold font-montserrat-alternates leading-none">
                             {title}
                         </div>
@@ -201,5 +216,6 @@ const ListItem = React.forwardRef<
     );
 });
 ListItem.displayName = "ListItem";
+
 
 
