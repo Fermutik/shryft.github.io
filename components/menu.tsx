@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/navigation-menu"
 import { BasePageProps } from "@/app/_page"
 import { getT } from "@/lib/utils";
+import { MenuIcon } from "@/components/lucid_icons"
 
 // Updated arrays with English titles based on the provided JSON mapping
 
@@ -99,7 +100,7 @@ export function SiteNavigationMenu({ t, lang }: BasePageProps) {
                     <NavigationMenuContent>
                         <ul className="grid gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] lg:grid-cols-3">
                             {smallFormatItems.map((item) => (
-                                <ListItem className="text-lg" key={item.title} title={t(item.title)} href={"/" + lang + item.href}>
+                                <ListItem className="text-lg" key={item.title} iconKey={item.title} title={t(item.title)} href={"/" + lang + item.href}>
                                 </ListItem>
                             ))}
                         </ul>
@@ -113,7 +114,7 @@ export function SiteNavigationMenu({ t, lang }: BasePageProps) {
                     <NavigationMenuContent>
                         <ul className="grid w-[450px] gap-3 p-4 md:w-[510px] md:grid-cols-2 lg:w-[630px] lg:grid-cols-2">
                             {largeFormatItems.map((item) => (
-                                <ListItem key={item.title} title={t(item.title)} href={"/" + lang + item.href}>
+                                <ListItem key={item.title} iconKey={item.title} title={t(item.title)} href={"/" + lang + item.href}>
                                 </ListItem>
                             ))}
                         </ul>
@@ -125,7 +126,7 @@ export function SiteNavigationMenu({ t, lang }: BasePageProps) {
                     <NavigationMenuContent>
                         <ul className="grid w-[550px] gap-3 p-4 md:w-[630px] md:grid-cols-2 lg:w-[770px] ">
                             {servicesItems.map((item) => (
-                                <ListItem key={item.title} title={t(item.title)} href={"/" + lang + item.href} />
+                                <ListItem key={item.title} iconKey={item.title} title={t(item.title)} href={"/" + lang + item.href} />
                             ))}
                         </ul>
                     </NavigationMenuContent>
@@ -139,6 +140,7 @@ export function SiteNavigationMenu({ t, lang }: BasePageProps) {
                                 <ListItem
                                     key={item.title}
                                     title={t(item.title)}
+                                    iconKey={item.title}
                                     href={"/" + lang + item.href}
                                 />
                             ))}
@@ -158,14 +160,17 @@ export function SiteNavigationMenu({ t, lang }: BasePageProps) {
     )
 }
 
-/**
- * ListItem component
- * Renders a single link item within the navigation menu.
- */
+// Define the props for ListItem including a new `iconKey` prop.
+type ListItemProps = React.ComponentPropsWithoutRef<"a"> & {
+    title: string;
+    iconKey?: string; // Make iconKey optional
+    children?: React.ReactNode;
+};
+
 const ListItem = React.forwardRef<
     React.ElementRef<"a">,
-    React.ComponentPropsWithoutRef<"a">
->(({ className, title, children, ...props }, ref) => {
+    ListItemProps
+>(({ className, title, iconKey, children, ...props }, ref) => {
     return (
         <li>
             <NavigationMenuLink asChild>
@@ -178,7 +183,13 @@ const ListItem = React.forwardRef<
                     )}
                     {...props}
                 >
-                    <div className="text-sm font-bold font-montserrat-alternates leading-none">{title}</div>
+                    <div className="flex items-center space-x-2">
+                        {/* Render the icon next to the title if available */}
+                        {iconKey && <MenuIcon menuKey={iconKey as any} className="w-4 h-4" />}
+                        <div className="text-sm font-bold font-montserrat-alternates leading-none">
+                            {title}
+                        </div>
+                    </div>
                     {children && (
                         <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
                             {children}
@@ -187,7 +198,8 @@ const ListItem = React.forwardRef<
                 </a>
             </NavigationMenuLink>
         </li>
-    )
-})
-ListItem.displayName = "ListItem"
+    );
+});
+ListItem.displayName = "ListItem";
+
 
