@@ -7,15 +7,16 @@ import { largeFormatItems } from "@/components/menu";
 
 export default function Home() {
     const { slug, lang } = useParams();
+
     if (!lang || (lang !== "ua" && lang !== "ru")) {
         notFound();
     }
 
-    const t = getT(lang, "page");
-
     if (typeof slug !== "string" || !largeFormatItems.some(item => item.title === slug)) {
         notFound();
     }
+
+    const t = getT(lang, "page");
 
     return BasePage(
         { t, lang },

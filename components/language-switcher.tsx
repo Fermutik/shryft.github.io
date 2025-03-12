@@ -39,14 +39,26 @@ const LanguageSwitcher = () => {
         return segments.join('/');
     };
 
+    /**
+     * Sets a cookie with the selected language.
+     * @param locale - The locale to be set in the cookie.
+     */
+    const setLanguageCookie = (locale: string) => {
+        // Set the 'language' cookie to the selected locale, with a max-age of 1 year and path '/'
+        document.cookie = `language=${locale}; path=/; max-age=${60 * 60 * 24 * 365}`;
+    };
+
     return (
         <div className="flex items-center justify-center h-full text-2xl font-bold">
             {locales.map((locale, index) => (
                 <React.Fragment key={locale}>
                     {index > 0 && ' | '}
                     <Link href={createLocalePath(locale)} passHref>
-                        {/* Underline the current active locale */}
-                        <span className={locale === activeLocale ? 'text-primary' : ''}>
+                        {/* Underline the current active locale and set cookie on click */}
+                        <span
+                            onClick={() => setLanguageCookie(locale)}
+                            className={locale === activeLocale ? 'text-primary' : ''}
+                        >
                             {locale.toUpperCase()}
                         </span>
                     </Link>
