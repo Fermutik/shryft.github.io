@@ -6,9 +6,12 @@ import { getT } from "@/lib/utils";
 import { supportItems } from "@/components/menu";
 
 export default function Home() {
-    const lang = "ru";
+    const { slug, lang } = useParams();
+    if (!lang || (lang !== "ua" && lang !== "ru")) {
+        notFound();
+    }
+
     const t = getT(lang, "page");
-    const { slug } = useParams();
 
     if (typeof slug !== "string" || !supportItems.some(item => item.title === slug)) {
         notFound();
@@ -16,6 +19,6 @@ export default function Home() {
 
     return BasePage(
         { t, lang },
-        { title: slug, form: true, image: false, post_article: false }
+        { title: slug, form: true, image: false, post_article: true }
     );
 }

@@ -98,9 +98,9 @@ export default function BasePage({ t, lang }: BasePageProps, { title, form, imag
                         ) : (
                             // When 'image' is false, render the standard HTML <img> element
                             <img
-                                src="https://placehold.co/350x400/cccccc/ffffff?Image+Placeholder"
+                                src="https://placehold.co/350x350/cccccc/ffffff?Image+Placeholder"
                                 width="350"
-                                height="400"
+                                height="350"
                                 alt={t_menu(title)}
                             />
                         )

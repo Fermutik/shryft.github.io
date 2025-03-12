@@ -1,7 +1,6 @@
 "use client";
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import UAPage from './ua/page';
 
 export default function Home() {
     const router = useRouter();
@@ -11,5 +10,5 @@ export default function Home() {
         router.replace('/ua');
     }, [router]);
 
-    return <UAPage />;
+    return null;
 }
