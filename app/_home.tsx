@@ -1,21 +1,28 @@
 "use client";
 
-import { Footer } from "@/components/footer";
-import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer"
+import { Navbar } from "@/components/navbar"
+import {
+    SidebarInset,
+    SidebarProvider,
+    SidebarTrigger,
+} from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/app-sidebar"
+import { BasePageProps } from "./_page";
 
 
-export interface HomePageProps {
-    t: (key: string) => string;
-    lang: string;
-}
-
-export default function HomePage({ t, lang }: HomePageProps) {
+export default function HomePage({ t, lang }: BasePageProps) {
 
     return (
-        <div className="flex flex-col justify-center items-center">
-            <Navbar t={t} lang={lang} />
-            <div className="flex flex-row justify-start w-full h-screen"></div>
-            <Footer t={t} lang={lang} />
-        </div >
+        <SidebarProvider>
+            <AppSidebar t={t} lang={lang} />
+            <SidebarInset>
+                <div className="flex flex-col justify-center items-center">
+                    <Navbar t={t} lang={lang} />
+                    <div className="flex flex-row justify-start w-full h-screen"></div>
+                    <Footer t={t} lang={lang} />
+                </div >
+            </SidebarInset>
+        </SidebarProvider>
     );
 }

@@ -61,8 +61,8 @@ const iconMapping = {
     "how-to-pay": "CreditCard",
     "delivery": "Truck",
     "materials-catalog": "Folder",
-    "smallFormat": "Grid2X2",
-    "largeFormat": "Grid3X3",
+    "small-format": "Grid2X2",
+    "large-format": "Grid3X3",
     "services": "Wrench",
     "support": "LifeBuoy",
     "contacts": "Phone"
