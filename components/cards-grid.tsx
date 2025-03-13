@@ -51,27 +51,33 @@ export function CardsGrid() {
     ]
 
     return (
-        < div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4" >
-            {
-                cardsData.map((card, index) => (
-
-                    < Card key={index} className="max-w-xs mx-auto" >
-                        <CardHeader>
-                            <CardTitle>{card.title}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <img
-                                src={card.image}
-                                alt={card.title}
-                                className="mb-2"
-                            />
-                            <p className="text-sm text-muted-foreground">
-                                {card.description}
-                            </p>
-                        </CardContent>
-                    </Card >
-                ))
-            }
-        </div >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-4 px-4 sm:px-0">
+            {cardsData.map((card, index) => (
+                <Card
+                    key={index}
+                    // Добавляем тень, скруглённые углы и эффект при наведении
+                    className="max-w-xs mx-auto bg-white border border-gray-100 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                >
+                    <CardHeader className="pb-2">
+                        {/* Выделяем заголовок, увеличив шрифт и сделав его жирным */}
+                        <CardTitle className="text-lg font-semibold text-gray-800">
+                            {card.title}
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex flex-col items-center">
+                        {/* Изображению можно задать дополнительные стили, например, скругление углов */}
+                        <img
+                            src={card.image}
+                            alt={card.title}
+                            className="mb-4 w-full h-auto object-cover rounded-md"
+                        />
+                        {/* Текст описания с более удобочитаемым межстрочным интервалом */}
+                        <p className="text-sm text-gray-600 leading-relaxed">
+                            {card.description}
+                        </p>
+                    </CardContent>
+                </Card>
+            ))}
+        </div>
     )
 }
