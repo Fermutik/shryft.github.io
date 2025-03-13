@@ -46,7 +46,7 @@ export function HeroSection() {
                 </h2>
 
                 {/* Сетка: 1 колонка на маленьких экранах, 3 колонки на средних и больших */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 ld:grid-cols-3 gap-8">
                     {items.map((item, index) => (
                         <div
                             key={index}

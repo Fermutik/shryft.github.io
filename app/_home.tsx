@@ -57,26 +57,14 @@ export default function HomePage({ t, lang }: BasePageProps) {
                             <CarouselNext />
                         </Carousel>
                     </div>
-                    <Card className="w-3/4 max-w-2xl mx-auto mt-4 bg-white shadow-sm border-l-4 border-primary">
-                        <CardHeader className="">
-                            <CardTitle className="font-montserrat-alternates text-2xl text-gray-800">
+                    <Card className="relative w-3/4 max-w-2xl mx-auto mt-6 rounded-lg shadow-lg overflow-hidden">
+                        <div className="absolute inset-0 bg-white" />
+
+                        <CardHeader className="relative p-8 z-10">
+                            <CardTitle className="font-montserrat-alternates text-2xl md:text-3xl ">
                                 Малоформатна продукція
                             </CardTitle>
-                            <CardDescription className="mt-2 text-gray-700 leading-relaxed">
-                                «P4» може друкувати блокноти на будь-якому
-                                матеріалі за ваших умов, пропонуючи гнучкі можливості та високу якість.
-                                Ми гарантуємо, що ви будете задоволені нашою роботою, адже оперативність
-                                та індивідуальний підхід – наші головні пріоритети.
-                            </CardDescription>
-                        </CardHeader>
-                    </Card>
-                    <CardsGrid />
-                    <Card className="w-3/4 max-w-2xl mx-auto mt-4 bg-white shadow-sm border-l-4 border-primary">
-                        <CardHeader className="">
-                            <CardTitle className="font-montserrat-alternates text-2xl text-gray-800">
-                                Широкоформатна продукція
-                            </CardTitle>
-                            <CardDescription className="mt-2 text-gray-700 leading-relaxed">
+                            <CardDescription className="mt-4 leading-relaxed">
                                 «P4» може друкувати блокноти на будь-якому
                                 матеріалі за ваших умов, пропонуючи гнучкі можливості та високу якість.
                                 Ми гарантуємо, що ви будете задоволені нашою роботою, адже оперативність
@@ -86,10 +74,24 @@ export default function HomePage({ t, lang }: BasePageProps) {
                     </Card>
                     <CardsGrid />
                     <Card className="relative w-3/4 max-w-2xl mx-auto mt-6 rounded-lg shadow-lg overflow-hidden">
-                        {/* Фоновый градиент: от левого верхнего угла к правому нижнему */}
                         <div className="absolute inset-0 bg-white" />
 
-                        {/* Контент карточки располагается поверх градиента (z-10) */}
+                        <CardHeader className="relative p-8 z-10">
+                            <CardTitle className="font-montserrat-alternates text-2xl md:text-3xl ">
+                                Широкоформатна продукція
+                            </CardTitle>
+                            <CardDescription className="mt-4 leading-relaxed">
+                                «P4» може друкувати блокноти на будь-якому
+                                матеріалі за ваших умов, пропонуючи гнучкі можливості та високу якість.
+                                Ми гарантуємо, що ви будете задоволені нашою роботою, адже оперативність
+                                та індивідуальний підхід – наші головні пріоритети.
+                            </CardDescription>
+                        </CardHeader>
+                    </Card>
+                    <CardsGrid />
+                    <Card className="relative w-3/4 max-w-2xl mx-auto mt-6 rounded-lg shadow-lg overflow-hidden">
+                        <div className="absolute inset-0 bg-white" />
+
                         <CardHeader className="relative p-8 z-10">
                             <CardTitle className="font-montserrat-alternates text-2xl md:text-3xl ">
                                 Цифровий банерний друк
