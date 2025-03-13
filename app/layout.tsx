@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { gilroy } from '../lib/fonts';
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -8,12 +9,6 @@ export const metadata: Metadata = {
 
 import { ThemeProvider } from "@/components/theme-provider";
 import LanguageSwitcher from "@/components/language-switcher";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/app-sidebar"
 
 export default function RootLayout({
   children,
@@ -21,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html suppressHydrationWarning>
+    <html suppressHydrationWarning className={gilroy.className}>
       <body className="flex flex-col items-center justify-center min-h-screen bg-secondary">
         <ThemeProvider
           attribute="class"
@@ -37,6 +32,6 @@ export default function RootLayout({
           </main>
         </ThemeProvider>
       </body>
-    </html>
+    </html >
   )
 }

@@ -94,8 +94,7 @@ export function SiteNavigationMenu({ t, lang }: BasePageProps) {
         <NavigationMenu className="hidden lg:block">
             <NavigationMenuList>
                 <NavigationMenuItem>
-                    <NavigationMenuTrigger className="dark font-montserrat-alternates leading-none text-sm lg:text-base">
-                        <MenuIcon menuKey={"small-format" as any} className="w-5 h-5 mr-2" />
+                    <NavigationMenuTrigger className="dark font-gilroy leading-none text-sm lg:text-base">
                         {t("small-format")}
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
@@ -109,8 +108,7 @@ export function SiteNavigationMenu({ t, lang }: BasePageProps) {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                    <NavigationMenuTrigger className="dark font-montserrat-alternates leading-none text-sm lg:text-base">
-                        <MenuIcon menuKey={"large-format" as any} className="w-5 h-5 mr-2" />
+                    <NavigationMenuTrigger className="dark font-gilroy leading-none text-sm lg:text-base">
                         {t("large-format")}
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
@@ -124,8 +122,7 @@ export function SiteNavigationMenu({ t, lang }: BasePageProps) {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                    <NavigationMenuTrigger className="dark font-montserrat-alternates leading-none text-sm lg:text-base">
-                        <MenuIcon menuKey={"services" as any} className="w-5 h-5 mr-2" />
+                    <NavigationMenuTrigger className="dark font-gilroy leading-none text-sm lg:text-base">
                         {t("services")}</NavigationMenuTrigger>
                     <NavigationMenuContent>
                         <ul className="grid w-[550px] gap-3 p-4 md:w-[630px] md:grid-cols-2 lg:w-[755px] ">
@@ -137,8 +134,7 @@ export function SiteNavigationMenu({ t, lang }: BasePageProps) {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                    <NavigationMenuTrigger className="dark font-montserrat-alternates leading-none text-sm lg:text-base">
-                        <MenuIcon menuKey={"support" as any} className="w-5 h-5 mr-2" />
+                    <NavigationMenuTrigger className="dark font-gilroy leading-none text-sm lg:text-base">
                         {t("support")}</NavigationMenuTrigger>
                     <NavigationMenuContent>
                         <ul className="grid w-[700px] gap-3 p-4 md:w-[770px] md:grid-cols-2 lg:w-[915px]">
@@ -154,11 +150,20 @@ export function SiteNavigationMenu({ t, lang }: BasePageProps) {
                     </NavigationMenuContent>
                 </NavigationMenuItem>
 
-                <NavigationMenuItem className="dark font-montserrat-alternates leading-none ">
+                <NavigationMenuItem className="dark font-gilroy leading-none ">
+                    <Link href={"/" + lang + "/blog"} legacyBehavior passHref>
+                        <NavigationMenuLink className={navigationMenuTriggerStyle() + "text-sm lg:text-base"}>
+                            <div className="flex items-center font-medium text-sm lg:text-base">
+                                {t("blog")}
+                            </div>
+                        </NavigationMenuLink>
+                    </Link>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem className="dark font-gilroy leading-none ">
                     <Link href={"/" + lang + "/contacts"} legacyBehavior passHref>
                         <NavigationMenuLink className={navigationMenuTriggerStyle() + "text-sm lg:text-base"}>
                             <div className="flex items-center font-medium text-sm lg:text-base">
-                                <MenuIcon menuKey={"contacts" as any} className="w-5 h-5 mr-2 text-accent-foreground" />
                                 {t("contacts")}
                             </div>
                         </NavigationMenuLink>
@@ -195,12 +200,6 @@ const ListItem = React.forwardRef<
                     <div className="flex items-center space-x-2">
                         {/* Render the icon next to the title if available.
                 Added 'flex-shrink-0' to ensure the icon maintains its size even if the title wraps. */}
-                        {iconKey && (
-                            <MenuIcon
-                                menuKey={iconKey as any}
-                                className="w-4 h-4 flex-shrink-0"
-                            />
-                        )}
                         <div className="text-sm font-bold leading-none">
                             {title}
                         </div>

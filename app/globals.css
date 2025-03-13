@@ -131,11 +131,11 @@
   }
 
   h2 {
-    font-family: var(--font-montserrat-alternates);
+    font-family: var(--font-gilroy);
   }
 
   h1 {
-    font-family: var(--font-montserrat-alternates);
+    font-family: var(--font-gilroy);
     font-weight: 700;
   }
 }

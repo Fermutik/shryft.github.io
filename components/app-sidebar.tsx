@@ -154,7 +154,7 @@ export function AppSidebar({
                       <CollapsibleTrigger asChild>
                         {item.url === "" ? (
 
-                          <SidebarMenuButton className="font-montserrat-alternates">
+                          <SidebarMenuButton className="font-gilroy">
                             <MenuIcon menuKey={item.title as any} className="w-5 h-5 mr-2" />
                             {t_menu(item.title)}{" "}
                             <Plus className="ml-auto group-data-[state=open]/collapsible:hidden" />
@@ -162,7 +162,7 @@ export function AppSidebar({
                           </SidebarMenuButton>
                         ) : (
                           <a href={"/" + lang + item.url}>
-                            <SidebarMenuButton className="font-montserrat-alternates">
+                            <SidebarMenuButton className="font-font-gilroy">
                               <MenuIcon menuKey={item.title as any} className="w-5 h-5 mr-2" />
                               {t_menu(item.title)}{" "}
                               <Plus className="ml-auto group-data-[state=open]/collapsible:hidden" />
@@ -178,7 +178,7 @@ export function AppSidebar({
                               <SidebarMenuSubButton
                                 asChild
                                 isActive={subItem.isActive}
-                                className="font-montserrat-alternates"
+                                className="font-gilroy"
                               >
                                 <a href={"/" + lang + subItem.url}>
                                   <MenuIcon menuKey={subItem.title as any} className="w-5 h-5 mr-2" />
@@ -196,13 +196,13 @@ export function AppSidebar({
                 return (
                   <SidebarMenuItem key={item.title}>
                     {item.url !== "" ? (
-                      <SidebarMenuButton asChild className="font-montserrat-alternates">
+                      <SidebarMenuButton asChild className="font-gilroy">
                         <a href={"/" + lang + item.url}>
                           <MenuIcon menuKey={item.title as any} className="w-5 h-5 mr-2" />
                           {t_menu(item.title)}</a>
                       </SidebarMenuButton>
                     ) : (
-                      <SidebarMenuButton className="font-montserrat-alternates">
+                      <SidebarMenuButton className="font-gilroy">
                         <MenuIcon menuKey={item.title as any} className="w-5 h-5 mr-2" />
                         {t_menu(item.title)}
                       </SidebarMenuButton>
