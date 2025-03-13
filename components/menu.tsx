@@ -201,7 +201,7 @@ const ListItem = React.forwardRef<
                                 className="w-4 h-4 flex-shrink-0"
                             />
                         )}
-                        <div className="text-sm font-bold font-montserrat-alternates leading-none">
+                        <div className="text-sm font-bold leading-none">
                             {title}
                         </div>
                     </div>

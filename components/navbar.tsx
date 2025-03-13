@@ -17,22 +17,27 @@ export const Navbar = ({ t, lang }: BasePageProps) => {
             {/* Top row with logo and images centered on the screen */}
             <div className="flex h-[130px] justify-center items-center">
                 <div className="flex items-center space-x-4">
-                    <Link href={"/"} className="h-fit w-fit">
+                    <Link href={"/"} className="flex lg:w-[180px] justify-end items-center">
                         <Logo className="w-[110px] h-[90px]" />
                     </Link>
                     <img
                         className="hidden lg:block"
-                        src="https://placehold.co/730x110/cccccc/ffffff?Image+Placeholder"
-                        alt="Placeholder"
+                        src="/banner.png"
+                        alt="P4"
                     />
-                    <img
-                        src="https://placehold.co/205x110/cccccc/ffffff?Image+Placeholder"
-                        alt="Placeholder"
-                    />
+                    <div className="flex flex-col self-end items-start">
+                        <div className="text-lg lg:text-xl font-bold tracking-wide">
+                            044 22 - 484 - 22
+                        </div>
+                        <div className="text-lg lg:text-xl font-bold tracking-wide">
+                            098 166 - 28 - 46
+                        </div>
+                        <div className="text-base lg:text-lg font-bold">PRINT@SHRIFT.COM</div>
+                    </div>
                 </div>
-            </div>
+            </div >
             {/* Bottom row with navigation menu and sidebar trigger */}
-            <div className="w-full text-sm lg:text-lg h-[50px] bg-black dark:bg-white text-white dark:text-black">
+            < div className="w-full text-sm lg:text-lg h-[50px] bg-black dark:bg-white text-white dark:text-black" >
                 <div className="container mx-auto grid grid-cols-3 items-center h-full">
                     {/* Left column: SidebarTrigger aligned with Logo */}
                     <div className="flex px-2 items-center">
@@ -47,7 +52,7 @@ export const Navbar = ({ t, lang }: BasePageProps) => {
                         <SiteNavigationMenu t={t} lang={lang} />
                     </div>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
