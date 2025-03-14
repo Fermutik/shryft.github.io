@@ -81,7 +81,7 @@ export default function HomePage({ t, lang }: BasePageProps) {
                             </div>
                         </Card>
                     </div>
-                    <CardsGrid />
+                    <CardsGrid t={t} lang={lang} />
                     <div className="flex flex-row flex-wrap justify-center items-start gap-6 mt-6">
                         <Card className="max-w-2xl mx-auto shadow-none border-none bg-gradient-to-r from-gray-50 to-gray-100">
                             <div className="col-span-1 lg:col-span-2 p-8">
@@ -106,7 +106,7 @@ export default function HomePage({ t, lang }: BasePageProps) {
                             </div>
                         </Card>
                     </div>
-                    <CardsGrid />
+                    <CardsGrid t={t} lang={lang} />
                     <div className="flex flex-row flex-wrap justify-center items-start gap-6 mt-6">
                         <Card className="max-w-2xl mx-auto shadow-none border-none bg-gradient-to-r from-gray-50 to-gray-100">
                             <div className="col-span-1 lg:col-span-2 p-8">
@@ -131,7 +131,7 @@ export default function HomePage({ t, lang }: BasePageProps) {
                             </div>
                         </Card>
                     </div>
-                    <CardsGrid />
+                    <CardsGrid t={t} lang={lang} />
                     <HeroSection />
                     <Footer t={t} lang={lang} />
                 </div >
