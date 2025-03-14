@@ -1,7 +1,5 @@
 import * as React from "react"
 import { GalleryVerticalEnd, Minus, Plus } from "lucide-react"
-
-import { SearchForm } from "@/components/search-form"
 import {
   Collapsible,
   CollapsibleContent,
@@ -22,7 +20,6 @@ import {
 } from "@/components/ui/sidebar"
 import { BasePageProps } from "@/app/_page"
 import { getT } from "@/lib/utils"
-import MenuIcon from "./lucid_icons"
 
 const data = {
   navMain: [
@@ -106,6 +103,14 @@ const data = {
       ],
     },
     {
+      title: "blog",
+      url: "",
+      items: [
+        { title: "news", url: "/blog/news" },
+        { title: "about-us", url: "/blog/about-us" },
+      ]
+    },
+    {
       title: "contacts",
       url:
         "/contacts",
@@ -132,7 +137,7 @@ export function AppSidebar({
                   <GalleryVerticalEnd className="size-4" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-medium">P4</span>
+                  <span className="font-medium">SHRYFT.COM</span>
                 </div>
               </a>
             </SidebarMenuButton>
@@ -155,7 +160,6 @@ export function AppSidebar({
                         {item.url === "" ? (
 
                           <SidebarMenuButton className="font-gilroy">
-                            <MenuIcon menuKey={item.title as any} className="w-5 h-5 mr-2" />
                             {t_menu(item.title)}{" "}
                             <Plus className="ml-auto group-data-[state=open]/collapsible:hidden" />
                             <Minus className="ml-auto group-data-[state=closed]/collapsible:hidden" />
@@ -163,7 +167,6 @@ export function AppSidebar({
                         ) : (
                           <a href={"/" + lang + item.url}>
                             <SidebarMenuButton className="font-font-gilroy">
-                              <MenuIcon menuKey={item.title as any} className="w-5 h-5 mr-2" />
                               {t_menu(item.title)}{" "}
                               <Plus className="ml-auto group-data-[state=open]/collapsible:hidden" />
                               <Minus className="ml-auto group-data-[state=closed]/collapsible:hidden" />
@@ -181,7 +184,6 @@ export function AppSidebar({
                                 className="font-gilroy"
                               >
                                 <a href={"/" + lang + subItem.url}>
-                                  <MenuIcon menuKey={subItem.title as any} className="w-5 h-5 mr-2" />
                                   {t_menu(subItem.title)}
                                 </a>
                               </SidebarMenuSubButton>
@@ -198,12 +200,10 @@ export function AppSidebar({
                     {item.url !== "" ? (
                       <SidebarMenuButton asChild className="font-gilroy">
                         <a href={"/" + lang + item.url}>
-                          <MenuIcon menuKey={item.title as any} className="w-5 h-5 mr-2" />
                           {t_menu(item.title)}</a>
                       </SidebarMenuButton>
                     ) : (
                       <SidebarMenuButton className="font-gilroy">
-                        <MenuIcon menuKey={item.title as any} className="w-5 h-5 mr-2" />
                         {t_menu(item.title)}
                       </SidebarMenuButton>
                     )}

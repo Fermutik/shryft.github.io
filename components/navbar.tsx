@@ -16,23 +16,23 @@ export const Navbar = ({ t, lang }: BasePageProps) => {
         <div className="flex flex-col w-full">
             {/* Top row with logo and images centered on the screen */}
             <div className="flex h-[130px] justify-center items-center">
-                <div className="flex items-center space-x-4">
-                    <Link href={"/"} className="flex lg:w-[180px] justify-end items-center">
-                        <Logo className="w-[110px] h-[90px]" />
+                <div className="flex items-center">
+                    <Link href={"/"} className="flex justify-end items-center lg:pr-2 pr-2">
+                        <Logo className="lg:w-[220px] w-[180px]" />
                     </Link>
                     <img
-                        className="hidden lg:block"
+                        className="hidden lg:block pr-4"
                         src="/banner.png"
-                        alt="P4"
+                        alt="banner"
                     />
-                    <div className="flex flex-col self-end items-start">
+                    <div className=" lg:w-[220px] flex flex-col self-end items-start">
                         <div className="text-lg lg:text-xl font-bold tracking-wide">
-                            044 22 - 484 - 22
+                            097 898 - 18 - 61
                         </div>
                         <div className="text-lg lg:text-xl font-bold tracking-wide">
-                            098 166 - 28 - 46
+                            093 150 - 28 - 29
                         </div>
-                        <div className="text-base lg:text-lg font-bold">PRINT@SHRIFT.COM</div>
+                        <div className="text-base lg:text-lg font-bold">PRINT@SHRYFT.COM</div>
                     </div>
                 </div>
             </div >

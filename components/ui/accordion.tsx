@@ -34,7 +34,7 @@ function AccordionPublic({
   return (
     <div
       data-slot="accordion-public"
-      className={cn("text-sm pt-0 prose lg:prose-lg", className)}
+      className={cn("text-sm pt-0 prose lg:prose-base", className)}
       {...props}
     >
       {children}
@@ -80,7 +80,7 @@ function AccordionHide({
   return (
     <AccordionPrimitive.Content
       data-slot="accordion-hide"
-      className="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm prose lg:prose-lg"
+      className="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm prose lg:prose-base"
       {...props}
     >
       <div className={cn("pt-0", className)}>{children}</div>

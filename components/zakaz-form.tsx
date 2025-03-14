@@ -1,11 +1,14 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import * as React from "react"
 import { useForm } from "react-hook-form"
 import { useState, useRef } from "react"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import Attach from "@/components/icons/attach"
+import { CalendarIcon } from "lucide-react"
+import { uk, ru } from "date-fns/locale";
 import {
     Form,
     FormControl,
@@ -34,12 +37,20 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { Textarea } from "@/components/ui/textarea"
+import { Calendar } from "@/components/ui/calendar"
+import { cn } from "@/lib/utils"
+import { format } from "date-fns"
 
 // Import custom PhoneInput component that uses @react-input/mask and shadcn's Input
 import PhoneInput from "@/components/phone-input"
 
 import { BasePageProps } from "@/app/_page"
 import { getT } from "@/lib/utils"
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
 
 export const ZakazForm = ({ t, lang }: BasePageProps) => {
     // Get translation function for the "zakaz-form" namespace
@@ -54,7 +65,8 @@ export const ZakazForm = ({ t, lang }: BasePageProps) => {
             .min(1, { message: t("UsernameRequired") })
             .max(50, { message: t("UsernameTooLong") }),
         tel: z.string().length(17, { message: t("InvalidPhone") }),
-        comment: z.string().max(500, { message: t("CommentTooLong") })
+        comment: z.string().max(500, { message: t("CommentTooLong") }),
+        dob: z.date().optional(),
     });
 
     // Initialize React Hook Form with Zod validation
@@ -95,6 +107,8 @@ export const ZakazForm = ({ t, lang }: BasePageProps) => {
     }
 
     const { isSubmitting, isValid } = form.formState
+    const [date, setDate] = React.useState<Date | undefined>(new Date())
+    const locale = lang === "ua" ? uk : ru;
 
     return (
         <div className="text-center p-2 rounded-lg shadow-xl w-full">
@@ -162,6 +176,54 @@ export const ZakazForm = ({ t, lang }: BasePageProps) => {
                         <div className="flex flex-col">
                             <FormField
                                 control={form.control}
+                                name="dob"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-col">
+                                        <Popover>
+                                            <PopoverTrigger asChild>
+                                                <FormControl>
+                                                    <div className="flex flex-row w-full pr-2">
+                                                        <Button
+                                                            variant={"outline"}
+                                                            type="button"
+                                                            className={cn(
+                                                                "w-1/2 text-left font-normal",
+                                                                !field.value && "text-muted-foreground"
+                                                            )}
+                                                        >
+                                                            {field.value ? (
+                                                                format(field.value, "PPP")
+                                                            ) : (
+                                                                <span>{t("desiredCompletionDay")}</span>
+                                                            )}
+                                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                        </Button>
+                                                        <div className="w-1/2"></div>
+                                                    </div>
+                                                </FormControl>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-auto p-0" align="start">
+                                                <Calendar
+                                                    mode="single"
+                                                    selected={field.value}
+                                                    onSelect={field.onChange}
+                                                    locale={locale}
+                                                    disabled={(date) =>
+                                                        date > new Date() || date < new Date("1900-01-01")
+                                                    }
+                                                    initialFocus
+                                                />
+                                            </PopoverContent>
+                                        </Popover>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+
+                        <div className="flex flex-col">
+                            <FormField
+                                control={form.control}
                                 name="comment"
                                 render={({ field }) => (
                                     <FormItem>
@@ -178,6 +240,7 @@ export const ZakazForm = ({ t, lang }: BasePageProps) => {
                                 )}
                             />
                         </div>
+
                         <div className="flex flex-row w-full space-x-2 mt-2">
                             <Button type="submit">
                                 {t("Submit")}

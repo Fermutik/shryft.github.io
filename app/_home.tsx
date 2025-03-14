@@ -13,19 +13,88 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel"
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
 import { AppSidebar } from "@/components/app-sidebar"
 import { BasePageProps } from "./_page";
 import { CardsGrid } from "@/components/cards-grid";
 import { HeroSection } from "@/components/hero";
+import SmallFormatUA from "@/markdown/ua/home/small-format.mdx";
+import SmallFormatRU from "@/markdown/ru/home/small-format.mdx";
+import LargeFormatUA from "@/markdown/ua/home/large-format.mdx";
+import LargeFormatRU from "@/markdown/ru/home/large-format.mdx";
+import ServicesUA from "@/markdown/ua/home/services.mdx";
+import ServicesRU from "@/markdown/ru/home/services.mdx";
 
+export interface HomeItem {
+    title: string;
+    image: string;
+    article_ua: React.ComponentType<any>;
+    article_ru: React.ComponentType<any>;
+    cardsData: CardData[];
+}
+
+export interface CardData {
+    title: string;
+    image: string;
+    description: string;
+}
+
+const cardsData = [
+    {
+        title: "presentations",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для каталогов. Здесь будет вторая часть описания.",
+    },
+    {
+        title: "brochures",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для лекал. Здесь будет вторая часть описания.",
+    },
+    {
+        title: "booklets",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для бланков. Здесь будет вторая часть описания.",
+    },
+    {
+        title: "hangers",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для бейджей. Здесь будет вторая часть описания.",
+    },
+    {
+        title: "books",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для сертификатов. Здесь будет вторая часть описания.",
+    },
+    {
+        title: "catalogs",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для визиток. Здесь будет вторая часть описания.",
+    },
+    {
+        title: "patterns",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для листовок. Здесь будет вторая часть описания.",
+    },
+    {
+        title: "badges",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для бирок. Здесь будет вторая часть описания.",
+    },
+]
+
+
+export const homeItems: HomeItem[] = [
+    { title: "small-format", article_ua: SmallFormatUA, article_ru: SmallFormatRU, image: "small-format.jpg", cardsData: cardsData },
+    { title: "large-format", article_ua: LargeFormatUA, article_ru: LargeFormatRU, image: "large-format.png", cardsData: cardsData },
+    { title: "services", article_ua: ServicesUA, article_ru: ServicesRU, image: "services.png", cardsData: cardsData },
+]
 
 export default function HomePage({ t, lang }: BasePageProps) {
 
@@ -57,81 +126,9 @@ export default function HomePage({ t, lang }: BasePageProps) {
                             <CarouselNext />
                         </Carousel>
                     </div>
-                    <div className="flex flex-row flex-wrap justify-center items-start gap-6 mt-6">
-                        <Card className="max-w-2xl mx-auto shadow-none border-none bg-gradient-to-r from-gray-50 to-gray-100">
-                            <div className="col-span-1 lg:col-span-2 p-8">
-                                <h1 className="font-gilroy text-2xl md:text-3xl">Малоформатна продукція</h1>
-                                <CardDescription className="mt-4 leading-relaxed">
-                                    «P4» може друкувати блокноти на будь-якому
-                                    матеріалі за ваших умов, пропонуючи гнучкі можливості та високу якість.
-                                    Ми гарантуємо, що ви будете задоволені нашою роботою, адже оперативність
-                                    та індивідуальний підхід – наші головні пріоритети.
-                                </CardDescription>
-                            </div>
-                        </Card>
-                        <Card className="max-w-2xl mx-auto py-0 hidden sm:block">
-                            <div className="col-span-1 lg:col-span-2">
-                                <img
-                                    src="https://placehold.co/662x235/cccccc/ffffff?Image+Placeholder"
-                                    width="662"
-                                    height="235"
-                                    alt="Carousel Image"
-                                    className="w-full object-cover rounded-md"
-                                />
-                            </div>
-                        </Card>
-                    </div>
-                    <CardsGrid t={t} lang={lang} />
-                    <div className="flex flex-row flex-wrap justify-center items-start gap-6 mt-6">
-                        <Card className="max-w-2xl mx-auto shadow-none border-none bg-gradient-to-r from-gray-50 to-gray-100">
-                            <div className="col-span-1 lg:col-span-2 p-8">
-                                <h1 className="font-gilroy text-2xl md:text-3xl">Малоформатна продукція</h1>
-                                <CardDescription className="mt-4 leading-relaxed">
-                                    «P4» може друкувати блокноти на будь-якому
-                                    матеріалі за ваших умов, пропонуючи гнучкі можливості та високу якість.
-                                    Ми гарантуємо, що ви будете задоволені нашою роботою, адже оперативність
-                                    та індивідуальний підхід – наші головні пріоритети.
-                                </CardDescription>
-                            </div>
-                        </Card>
-                        <Card className="max-w-2xl mx-auto py-0 hidden sm:block">
-                            <div className="col-span-1 lg:col-span-2">
-                                <img
-                                    src="https://placehold.co/662x235/cccccc/ffffff?Image+Placeholder"
-                                    width="662"
-                                    height="235"
-                                    alt="Carousel Image"
-                                    className="w-full object-cover rounded-md"
-                                />
-                            </div>
-                        </Card>
-                    </div>
-                    <CardsGrid t={t} lang={lang} />
-                    <div className="flex flex-row flex-wrap justify-center items-start gap-6 mt-6">
-                        <Card className="max-w-2xl mx-auto shadow-none border-none bg-gradient-to-r from-gray-50 to-gray-100">
-                            <div className="col-span-1 lg:col-span-2 p-8">
-                                <h1 className="font-montserrat-alternates text-2xl md:text-3xl">Малоформатна продукція</h1>
-                                <CardDescription className="mt-4 leading-relaxed">
-                                    «P4» може друкувати блокноти на будь-якому
-                                    матеріалі за ваших умов, пропонуючи гнучкі можливості та високу якість.
-                                    Ми гарантуємо, що ви будете задоволені нашою роботою, адже оперативність
-                                    та індивідуальний підхід – наші головні пріоритети.
-                                </CardDescription>
-                            </div>
-                        </Card>
-                        <Card className="max-w-2xl mx-auto py-0 hidden sm:block">
-                            <div className="col-span-1 lg:col-span-2">
-                                <img
-                                    src="https://placehold.co/662x235/cccccc/ffffff?Image+Placeholder"
-                                    width="662"
-                                    height="235"
-                                    alt="Carousel Image"
-                                    className="w-full object-cover rounded-md"
-                                />
-                            </div>
-                        </Card>
-                    </div>
-                    <CardsGrid t={t} lang={lang} />
+                    <CardsGrid t={t} lang={lang} item={homeItems[0]} />
+                    <CardsGrid t={t} lang={lang} item={homeItems[1]} />
+                    <CardsGrid t={t} lang={lang} item={homeItems[2]} />
                     <HeroSection />
                     <Footer t={t} lang={lang} />
                 </div >

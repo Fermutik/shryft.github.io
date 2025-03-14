@@ -117,7 +117,6 @@ export default function BasePage({ t, lang }: BasePageProps, { title, form, imag
                         </div>
                         <div className="ml-[10px] mt-2">
                             <h1 className="text-2xl lg:text-3xl flex items-center">
-                                <MenuIcon menuKey={title as any} className="w-6 mr-1 text-muted-foreground" />
                                 {t_menu(title)}</h1>
                             <Breadcrumb className="text-xs lg:text-sm mb-4">
                                 <BreadcrumbList>
