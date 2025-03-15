@@ -6,7 +6,7 @@ import { getT } from "@/lib/utils";
 export const Footer = ({ t, lang }: BasePageProps) => {
     t = getT(lang, "footer");
     return (
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full mt-4">
             <div className="flex h-[50px] text-sm lg:text-lg bg-black dark:bg-white text-white dark:text-black items-center justify-center">
                 <h2 className="text-center">{t("title")}</h2>
             </div>

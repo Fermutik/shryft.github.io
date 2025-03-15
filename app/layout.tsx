@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 
 import { ThemeProvider } from "@/components/theme-provider";
 import LanguageSwitcher from "@/components/language-switcher";
+import { ScrollToTop } from '@/components/scroll-to-top';
 
 export default function RootLayout({
   children,
@@ -28,7 +29,10 @@ export default function RootLayout({
             <div className="absolute right-4 z-50 hidden xl:block">
               <LanguageSwitcher />
             </div>
+
             {children}
+
+            <ScrollToTop />  {/* Added ScrollToTop component */}
           </main>
         </ThemeProvider>
       </body>

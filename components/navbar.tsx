@@ -21,7 +21,7 @@ export const Navbar = ({ t, lang }: BasePageProps) => {
                         <Logo className="lg:w-[220px] w-[180px]" />
                     </Link>
                     <img
-                        className="hidden lg:block pr-4"
+                        className="hidden xl:block pr-4"
                         src="/banner.png"
                         alt="banner"
                     />

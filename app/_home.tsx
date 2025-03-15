@@ -6,13 +6,6 @@ import {
     SidebarInset,
     SidebarProvider,
 } from "@/components/ui/sidebar"
-import {
-    Carousel,
-    CarouselContent,
-    CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
-} from "@/components/ui/carousel"
 import { AppSidebar } from "@/components/app-sidebar"
 import { BasePageProps } from "./_page";
 import { CardsGrid } from "@/components/cards-grid";
@@ -23,6 +16,7 @@ import LargeFormatUA from "@/markdown/ua/home/large-format.mdx";
 import LargeFormatRU from "@/markdown/ru/home/large-format.mdx";
 import ServicesUA from "@/markdown/ua/home/services.mdx";
 import ServicesRU from "@/markdown/ru/home/services.mdx";
+import Image from "next/image";
 
 export interface HomeItem {
     title: string;
@@ -104,28 +98,21 @@ export default function HomePage({ t, lang }: BasePageProps) {
             <SidebarInset>
                 <div className="flex flex-col justify-center items-center bg-gradient-to-r from-gray-50 to-gray-100">
                     <Navbar t={t} lang={lang} />
-                    <div className="relative w-screen justify-center  hidden lg:flex ">
-                        <div className="z-0 absolute top-1/2 left-0 w-screen h-[150px] bg-primary -translate-y-1/2 pointer-events-none" />
-                        <Carousel className="w-full max-w-3xl flex justify-center items-center mt-3 ">
-                            <CarouselContent>
-                                {Array.from({ length: 5 }).map((_, index) => (
-                                    <CarouselItem key={index}>
-                                        <div className="flex justify-center items-center">
-
-                                            <img
-                                                src="https://placehold.co/768x250/cccccc/ffffff?Image+Placeholder"
-                                                width="768"
-                                                height="250"
-                                                alt="Carousel Image"
-                                            />
-                                        </div>
-                                    </CarouselItem>
-                                ))}
-                            </CarouselContent>
-                            <CarouselPrevious />
-                            <CarouselNext />
-                        </Carousel>
-                    </div>
+                    <img
+                        src="/home/banner.png"
+                        srcSet="
+                            /home/banner.png 1920w,
+                            /home/banner-1536.png 1536w,
+                            /home/banner-1200.png 1200w,
+                            /home/banner-768.png 768w,
+                            /home/banner-600.png 600w,
+                        "
+                        sizes="(max-width: 720px) 100vw, (max-width: 960px) 100vw, 1920px"
+                        width="1920"
+                        height="600"
+                        alt="banner"
+                        className="alignnone size-full hidden lg:block"
+                    ></img>
                     <CardsGrid t={t} lang={lang} item={homeItems[0]} />
                     <CardsGrid t={t} lang={lang} item={homeItems[1]} />
                     <CardsGrid t={t} lang={lang} item={homeItems[2]} />

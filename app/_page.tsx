@@ -35,7 +35,6 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import MenuIcon from "@/components/lucid_icons";
 
 export interface BasePageProps {
     t: (key: string) => string;
@@ -47,6 +46,8 @@ export interface BasePageSettings {
     form: boolean;
     image: boolean;
     post_article: boolean;
+    carousel?: boolean;
+    accordion_public?: boolean;
 }
 
 import {
@@ -55,7 +56,7 @@ import {
     SidebarTrigger,
 } from "@/components/ui/sidebar"
 
-export default function BasePage({ t, lang }: BasePageProps, { title, form, image, post_article }: BasePageSettings) {
+export default function BasePage({ t, lang }: BasePageProps, { title, form, image, post_article, carousel = true, accordion_public = true }: BasePageSettings) {
 
     const ZakazPublic = lang === 'ua' ? ZakazPublicUa : ZakazPublicRu;
     const ZakazHide = lang === 'ua' ? ZakazHideUa : ZakazHideRu;
@@ -129,7 +130,9 @@ export default function BasePage({ t, lang }: BasePageProps, { title, form, imag
                                             )}
                                             {index < breadcrumbs.length - 1 ? (
                                                 <BreadcrumbItem>
-                                                    {crumb.label}
+                                                    <BreadcrumbLink href={crumb.href}>
+                                                        {crumb.label}
+                                                    </BreadcrumbLink>
                                                 </BreadcrumbItem>
                                             ) : (
                                                 <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
@@ -139,27 +142,7 @@ export default function BasePage({ t, lang }: BasePageProps, { title, form, imag
                                 </BreadcrumbList>
                             </Breadcrumb>
                             <Separator className="mb-4" />
-                            <Accordion type="single" collapsible>
-                                <AccordionItem value="item-1">
-                                    <AccordionPublic className="dark:text-gray-200">
-                                        <ZakazPublic />
-                                    </AccordionPublic>
-                                    <AccordionHide>
-                                        <ZakazHide />
-                                    </AccordionHide>
-                                    <AccordionTrigger collapsedLabel={t("readMore")} expandedLabel={t("close")} />
-                                </AccordionItem>
-                            </Accordion>
-                            {form && (
-                                <>
-                                    <h2 className="scroll-m-20 text-xl lg:text-2xl font-bold mb-2">
-                                        {t("orderNotebooksPrintTitle")}
-                                    </h2>
-                                    <ZakazForm t={t} lang={lang} />
-                                </>
-                            )}
-                            <Separator className="mb-4" />
-                            {post_article && (
+                            {accordion_public ? (
                                 <Accordion type="single" collapsible>
                                     <AccordionItem value="item-1">
                                         <AccordionPublic className="dark:text-gray-200">
@@ -168,18 +151,51 @@ export default function BasePage({ t, lang }: BasePageProps, { title, form, imag
                                         <AccordionHide>
                                             <ZakazHide />
                                         </AccordionHide>
-                                        <AccordionTrigger collapsedLabel={t("readMore")} expandedLabel={t("close")} />
+                                        <AccordionTrigger
+                                            collapsedLabel={t("readMore")}
+                                            expandedLabel={t("close")}
+                                        />
                                     </AccordionItem>
                                 </Accordion>
+                            ) : (
+                                <div className="prose">
+                                    <ZakazPublic />
+                                </div>
+                            )}
+                            {form && (
+                                <>
+                                    <h2 className="scroll-m-20 text-xl lg:text-2xl font-bold mb-2">
+                                        {t("orderNotebooksPrintTitle")}
+                                    </h2>
+                                    <ZakazForm t={t} lang={lang} />
+                                </>
+                            )}
+                            {post_article && (
+                                <>
+                                    <Separator className="mb-4" />
+                                    <Accordion type="single" collapsible>
+                                        <AccordionItem value="item-1">
+                                            <AccordionPublic className="dark:text-gray-200">
+                                                <ZakazPublic />
+                                            </AccordionPublic>
+                                            <AccordionHide>
+                                                <ZakazHide />
+                                            </AccordionHide>
+                                            <AccordionTrigger collapsedLabel={t("readMore")} expandedLabel={t("close")} />
+                                        </AccordionItem>
+                                    </Accordion>
+                                </>
                             )}
                         </div>
                     </div>
-                    <div className="flex-col justify-start mt-2 hidden xl:block">
-                        <h2 className="scroll-m-20 text-2xl font-bold mx-2 mb-2">
-                            {t("alsoWeDo")}
-                        </h2>
-                        <CarouselSize t={t} lang={lang} />
-                    </div>
+                    {carousel && (
+                        <div className="flex-col justify-start mt-2 hidden xl:block">
+                            <h2 className="scroll-m-20 text-2xl font-bold mx-2">
+                                {t("alsoWeDo")}
+                            </h2>
+                            <CarouselSize t={t} lang={lang} />
+                        </div>
+                    )}
                     <Footer t={t} lang={lang} />
                 </div >
             </SidebarInset>

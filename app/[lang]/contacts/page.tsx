@@ -13,6 +13,6 @@ export default function Home() {
 
     return BasePage(
         { t, lang },
-        { title: "contacts", form: false, image: false, post_article: false }
+        { title: "contacts", form: false, image: false, post_article: false, carousel: false, accordion_public: false }
     );
 }
