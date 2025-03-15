@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { BasePageProps } from "@/app/_page"
 import { getT } from "@/lib/utils";
 

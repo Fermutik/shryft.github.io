@@ -116,7 +116,7 @@ export default function HomePage({ t, lang }: BasePageProps) {
                     <CardsGrid t={t} lang={lang} item={homeItems[0]} />
                     <CardsGrid t={t} lang={lang} item={homeItems[1]} />
                     <CardsGrid t={t} lang={lang} item={homeItems[2]} />
-                    <HeroSection />
+                    <HeroSection t={t} lang={lang} />
                     <Footer t={t} lang={lang} />
                 </div >
             </SidebarInset>
