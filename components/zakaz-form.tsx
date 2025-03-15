@@ -208,9 +208,11 @@ export const ZakazForm = ({ t, lang }: BasePageProps) => {
                                                     selected={field.value}
                                                     onSelect={field.onChange}
                                                     locale={locale}
-                                                    disabled={(date) =>
-                                                        date > new Date() || date < new Date("1900-01-01")
-                                                    }
+                                                    disabled={(date) => {
+                                                        const today = new Date();
+                                                        today.setHours(0, 0, 0, 0);
+                                                        return date < today;
+                                                    }}
                                                 />
                                             </PopoverContent>
                                         </Popover>
