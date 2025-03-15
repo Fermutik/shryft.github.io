@@ -20,6 +20,6 @@ export default function Home() {
 
     return BasePage(
         { t, lang },
-        { title: slug, form: true, image: false, post_article: true }
+        { title: slug, form: true, image: false, post_article: false, carousel: false }
     );
 }

@@ -8,7 +8,7 @@ import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import Attach from "@/components/icons/attach"
 import { CalendarIcon } from "lucide-react"
-import { uk, ru } from "date-fns/locale";
+import { uk, ru } from "react-day-picker/locale";
 import {
     Form,
     FormControl,
@@ -192,7 +192,7 @@ export const ZakazForm = ({ t, lang }: BasePageProps) => {
                                                             )}
                                                         >
                                                             {field.value ? (
-                                                                format(field.value, "PPP")
+                                                                format(field.value, "P", { locale })
                                                             ) : (
                                                                 <span>{t("desiredCompletionDay")}</span>
                                                             )}
@@ -211,7 +211,6 @@ export const ZakazForm = ({ t, lang }: BasePageProps) => {
                                                     disabled={(date) =>
                                                         date > new Date() || date < new Date("1900-01-01")
                                                     }
-                                                    initialFocus
                                                 />
                                             </PopoverContent>
                                         </Popover>
