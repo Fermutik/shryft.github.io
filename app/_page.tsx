@@ -1,7 +1,4 @@
-"use client";
-
-import React, { useMemo } from "react";
-import { usePathname } from "next/navigation";
+import React from "react";
 import { Slash } from "lucide-react"
 
 // UI components imports (shared)
@@ -18,10 +15,6 @@ import { Separator } from "@/components/ui/separator";
 import { CarouselSize } from "@/components/carousel";
 import { ZakazForm } from "@/components/zakaz-form";
 
-import ZakazPublicUa from "@/markdown/ua/zakaz_public.mdx";
-import ZakazHideUa from "@/markdown/ua/zakaz_hide.mdx";
-import ZakazPublicRu from "@/markdown/ru/zakaz_public.mdx";
-import ZakazHideRu from "@/markdown/ru/zakaz_hide.mdx";
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 import { getT } from "@/lib/utils";
@@ -37,8 +30,17 @@ import {
 } from "@/components/ui/breadcrumb"
 
 export interface BasePageProps {
-    t: (key: string) => string;
     lang: string;
+    breadcrumbs?: Array<{ label: string; href: string }>;
+}
+
+// Define the Post interface to type the posts array
+export interface Post {
+    lang: string;
+    section: string;
+    slug: string | null;
+    filename: string;
+    content: any;
 }
 
 export interface BasePageSettings {
@@ -48,6 +50,7 @@ export interface BasePageSettings {
     post_article: boolean;
     carousel?: boolean;
     accordion_public?: boolean;
+    posts: Post[];
 }
 
 import {
@@ -56,69 +59,179 @@ import {
     SidebarTrigger,
 } from "@/components/ui/sidebar"
 
-export default function BasePage({ t, lang }: BasePageProps, { title, form, image, post_article, carousel = true, accordion_public = true }: BasePageSettings) {
+import fs from "fs";
+import path from "path";
+import matter from "gray-matter";
+import { remark } from 'remark';
+import html from 'remark-html';
 
-    const ZakazPublic = lang === 'ua' ? ZakazPublicUa : ZakazPublicRu;
-    const ZakazHide = lang === 'ua' ? ZakazHideUa : ZakazHideRu;
+export async function getStaticProps() {
+    // Define the base directory for markdown files
+    const markdownDir = path.join(process.cwd(), "markdown");
+    // Initialize an array to hold all post objects
+    const posts = [];
+
+    // Read all language directories (e.g., 'ua', 'ru')
+    const languages = fs.readdirSync(markdownDir);
+    for (const lang of languages) {
+        const langPath = path.join(markdownDir, lang);
+        if (fs.statSync(langPath).isDirectory()) {
+            // Read all section directories (e.g., 'services', 'home', 'blog')
+            const sections = fs.readdirSync(langPath);
+            for (const section of sections) {
+                const sectionPath = path.join(langPath, section);
+                if (fs.statSync(sectionPath).isDirectory()) {
+                    // Read all items in the section directory.
+                    // Items can be MDX files directly in the section or subdirectories (slug directories).
+                    const items = fs.readdirSync(sectionPath);
+                    for (const item of items) {
+                        const itemPath = path.join(sectionPath, item);
+                        const stats = fs.statSync(itemPath);
+                        if (stats.isFile() && item.endsWith(".mdx")) {
+                            // MDX file directly in the section (no slug)
+                            const fileContent = fs.readFileSync(itemPath, "utf8");
+                            const matterResult = matter(fileContent);
+
+                            // Use remark to convert markdown into HTML string
+                            const processedContent = await remark()
+                                .use(html)
+                                .process(matterResult.content);
+                            const contentHtml = processedContent.toString();
+                            posts.push({
+                                lang,         // Language (e.g., 'ua')
+                                section,      // Section (e.g., 'services')
+                                slug: null,   // No slug because file is at the section level
+                                filename: item,
+                                content: contentHtml,
+                            });
+                        } else if (stats.isDirectory()) {
+                            // Item is a directory, treat it as a slug directory
+                            const slug = item;
+                            // Read all MDX files within this slug directory
+                            const files = fs.readdirSync(itemPath);
+                            for (const file of files) {
+                                if (file.endsWith(".mdx")) {
+                                    const filePath = path.join(itemPath, file);
+                                    const fileContent = fs.readFileSync(filePath, "utf8");
+                                    const matterResult = matter(fileContent);
+
+                                    // Use remark to convert markdown into HTML string
+                                    const processedContent = await remark()
+                                        .use(html)
+                                        .process(matterResult.content);
+                                    const contentHtml = processedContent.toString();
+                                    posts.push({
+                                        lang,         // Language (e.g., 'ua')
+                                        section,      // Section (e.g., 'services')
+                                        slug,         // Slug (e.g., 'black-and-white-print')
+                                        filename: file,
+                                        content: contentHtml,
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Return the array of posts as props
+    return {
+        props: {
+            posts,
+        },
+    };
+}
+
+export function makeBreadcrumbs(lang: string, rootSegment: string, slug?: string) {
+    // Функция для перевода, например, t_menu("blog")
+    const t_menu = getT(lang, "menu");
+
+    // Начинаем с массива, где первый пункт — главная страница
+    const crumbs = [
+        {
+            label: t_menu("main").toUpperCase(),
+            href: `/${lang}`,
+        },
+        {
+            label: (t_menu(rootSegment) || rootSegment).toUpperCase(),
+            href: `/${lang}/${rootSegment}`,
+        },
+    ];
+
+    // Если у нас передан `slug`, добавим третий уровень
+    if (slug) {
+        crumbs.push({
+            label: (t_menu(slug) || slug).toUpperCase(),
+            href: `/${lang}/${rootSegment}/${slug}`,
+        });
+    }
+
+    return crumbs;
+}
+
+export default function BasePage(
+    { lang, breadcrumbs = [] }: BasePageProps,
+    {
+        title,
+        form,
+        image,
+        post_article,
+        carousel = true,
+        accordion_public = true,
+        posts,
+    }: BasePageSettings
+) {
+    // Extract MDX content for public and hidden articles based on filename
+    const publicArticle = posts.find(
+        (post) => post.filename === "article-public.mdx"
+    );
+    const hideArticle = posts.find(
+        (post) => post.filename === "article-hide.mdx"
+    );
 
     const t_menu = getT(lang, "menu");
 
-    const pathname = usePathname();
-
-    const breadcrumbs = useMemo(() => {
-        const segments = pathname.split("/").filter(Boolean);
-        // Assume first segment is language; start breadcrumbs with home.
-        const crumbs = [{ label: "ГОЛОВНА", href: `/${lang}` }];
-        let pathAcc = `/${lang}`;
-        // Process segments from index 1 onward.
-        for (let i = 1; i < segments.length; i++) {
-            pathAcc += `/${segments[i]}`;
-            // Use t_menu for translation if available.
-            crumbs.push({ label: (getT(lang, "menu")(segments[i]) || segments[i]).toUpperCase(), href: pathAcc });
-        }
-        return crumbs;
-    }, [pathname, lang]);
-
-    console.log("Title: ", title, title + ".png");
+    const t = getT(lang, "page");
 
     return (
         <SidebarProvider>
-            <AppSidebar t={t} lang={lang} />
+            <AppSidebar lang={lang} />
             <SidebarInset>
                 <div className="flex flex-col justify-center items-center">
-                    <Navbar t={t} lang={lang} />
+                    <Navbar lang={lang} />
                     <div className="flex flex-row justify-start">
                         <div className="flex-col items-center text-center mt-20 hidden lg:block px-8">
                             {image ? (
                                 // When 'image' is true, render the custom Image component
                                 <Image
-                                    src={"/" + title + ".png"}
+                                    src={`/${title}.png`}
+                                    width={360}
+                                    height={504}
+                                    alt={t_menu(title)}
+                                />
+                            ) : title === "notepads" ? (
+                                <Image
+                                    src={`/${title}.png`}
                                     width={360}
                                     height={504}
                                     alt={t_menu(title)}
                                 />
                             ) : (
-                                title === "notepads" ? (
-                                    <Image
-                                        src={"/" + title + ".png"}
-                                        width={360}
-                                        height={504}
-                                        alt={t_menu(title)}
-                                    />
-                                ) : (
-                                    // When 'image' is false, render the standard HTML <img> element
-                                    <img
-                                        src="https://placehold.co/350x350/cccccc/ffffff?Image+Placeholder"
-                                        width="350"
-                                        height="350"
-                                        alt={t_menu(title)}
-                                    />
-                                )
+                                // When 'image' is false, render a placeholder image
+                                <img
+                                    src="https://placehold.co/350x350/cccccc/ffffff?Image+Placeholder"
+                                    width="350"
+                                    height="350"
+                                    alt={t_menu(title)}
+                                />
                             )}
                         </div>
                         <div className="ml-[10px] mt-2">
                             <h1 className="text-2xl lg:text-3xl flex items-center">
-                                {t_menu(title)}</h1>
+                                {t_menu(title)}
+                            </h1>
                             <Breadcrumb className="text-xs lg:text-sm mb-4">
                                 <BreadcrumbList>
                                     {breadcrumbs.map((crumb, index) => (
@@ -146,10 +259,20 @@ export default function BasePage({ t, lang }: BasePageProps, { title, form, imag
                                 <Accordion type="single" collapsible>
                                     <AccordionItem value="item-1">
                                         <AccordionPublic className="dark:text-gray-200">
-                                            <ZakazPublic />
+                                            {/* Render public article MDX content */}
+                                            {publicArticle ? (
+                                                <div dangerouslySetInnerHTML={{ __html: publicArticle.content }} />
+                                            ) : (
+                                                <div>Public article not found</div>
+                                            )}
                                         </AccordionPublic>
                                         <AccordionHide>
-                                            <ZakazHide />
+                                            {/* Render hidden article MDX content */}
+                                            {hideArticle ? (
+                                                <div dangerouslySetInnerHTML={{ __html: hideArticle.content }} />
+                                            ) : (
+                                                <div>Hidden article not found</div>
+                                            )}
                                         </AccordionHide>
                                         <AccordionTrigger
                                             collapsedLabel={t("readMore")}
@@ -159,7 +282,12 @@ export default function BasePage({ t, lang }: BasePageProps, { title, form, imag
                                 </Accordion>
                             ) : (
                                 <div className="prose">
-                                    <ZakazPublic />
+                                    {/* When accordion is disabled, render only public article */}
+                                    {publicArticle ? (
+                                        <div dangerouslySetInnerHTML={{ __html: publicArticle.content }} />
+                                    ) : (
+                                        <div>Public article not found</div>
+                                    )}
                                 </div>
                             )}
                             {form && (
@@ -167,7 +295,7 @@ export default function BasePage({ t, lang }: BasePageProps, { title, form, imag
                                     <h2 className="scroll-m-20 text-xl lg:text-2xl font-bold mb-2">
                                         {t("orderNotebooksPrintTitle")}
                                     </h2>
-                                    <ZakazForm t={t} lang={lang} />
+                                    <ZakazForm lang={lang} />
                                 </>
                             )}
                             {post_article && (
@@ -176,12 +304,23 @@ export default function BasePage({ t, lang }: BasePageProps, { title, form, imag
                                     <Accordion type="single" collapsible>
                                         <AccordionItem value="item-1">
                                             <AccordionPublic className="dark:text-gray-200">
-                                                <ZakazPublic />
+                                                {publicArticle ? (
+                                                    <div dangerouslySetInnerHTML={{ __html: publicArticle.content }} />
+                                                ) : (
+                                                    <div>Public article not found</div>
+                                                )}
                                             </AccordionPublic>
                                             <AccordionHide>
-                                                <ZakazHide />
+                                                {hideArticle ? (
+                                                    <div dangerouslySetInnerHTML={{ __html: hideArticle.content }} />
+                                                ) : (
+                                                    <div>Hidden article not found</div>
+                                                )}
                                             </AccordionHide>
-                                            <AccordionTrigger collapsedLabel={t("readMore")} expandedLabel={t("close")} />
+                                            <AccordionTrigger
+                                                collapsedLabel={t("readMore")}
+                                                expandedLabel={t("close")}
+                                            />
                                         </AccordionItem>
                                     </Accordion>
                                 </>
@@ -193,11 +332,11 @@ export default function BasePage({ t, lang }: BasePageProps, { title, form, imag
                             <h2 className="scroll-m-20 text-2xl font-bold mx-2">
                                 {t("alsoWeDo")}
                             </h2>
-                            <CarouselSize t={t} lang={lang} />
+                            <CarouselSize lang={lang} />
                         </div>
                     )}
-                    <Footer t={t} lang={lang} />
-                </div >
+                    <Footer lang={lang} />
+                </div>
             </SidebarInset>
         </SidebarProvider>
     );

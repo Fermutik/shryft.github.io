@@ -120,7 +120,6 @@ const data = {
 
 
 export function AppSidebar({
-  t,
   lang,
   ...props
 }: BasePageProps & React.ComponentProps<typeof Sidebar>) {

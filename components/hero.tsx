@@ -3,12 +3,12 @@ import { BasePageProps } from "@/app/_page"
 import { getT } from "@/lib/utils";
 import { Star } from "lucide-react"
 
-export function HeroSection({ t, lang }: BasePageProps) {
+export function HeroSection({ lang }: BasePageProps) {
     const items = Array.from({ length: 6 }, (_, i) => ({
         title: `i${i + 1}.title`,
         description: `i${i + 1}.description`,
     }));
-    t = getT(lang, "hero");
+    const t = getT(lang, "hero");
 
     return (
         <section className="py-12">

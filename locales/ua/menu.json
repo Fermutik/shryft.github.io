@@ -26,7 +26,7 @@
     "drawings": "Креслення",
     "tablets": "Планшети",
     "tracing-paper-print": "Друк на кальці",
-    "posters-bills": "Плакати, Афіші",
+    "posters": "Плакати",
     "self-adhesive-print": "Друк на самоклейці",
     "photo-wallpaper": "Фотошпалери",
     "oracal-print": "Друк на оракалі",
@@ -61,5 +61,8 @@
     "contacts": "Контакти",
     "blog": "Блог",
     "about-us": "Про нас",
-    "news": "Новини"
+    "news": "Новини",
+    "main": "Головна",
+    "bills": "Афіші",
+    "notebooks": "Зошити"
 }

@@ -1,5 +1,3 @@
-"use client";
-
 import { Footer } from "@/components/footer"
 import { Navbar } from "@/components/navbar"
 import {
@@ -10,21 +8,55 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { BasePageProps } from "./_page";
 import { CardsGrid } from "@/components/cards-grid";
 import { HeroSection } from "@/components/hero";
-import SmallFormatUA from "@/markdown/ua/home/small-format.mdx";
-import SmallFormatRU from "@/markdown/ru/home/small-format.mdx";
-import LargeFormatUA from "@/markdown/ua/home/large-format.mdx";
-import LargeFormatRU from "@/markdown/ru/home/large-format.mdx";
-import ServicesUA from "@/markdown/ua/home/services.mdx";
-import ServicesRU from "@/markdown/ru/home/services.mdx";
-import Image from "next/image";
+import fs from "fs";
+import path from "path";
+import matter from "gray-matter";
+import { remark } from 'remark';
+import html from 'remark-html';
+
 
 export interface HomeItem {
     title: string;
     image: string;
-    article_ua: React.ComponentType<any>;
-    article_ru: React.ComponentType<any>;
+    article: any;
     cardsData: CardData[];
 }
+
+export async function getHomePosts(lang: string = "ua") {
+    // Define the home directory for the specified language
+    const homeDir = path.join(process.cwd(), "markdown", lang, "home");
+    const posts = [];
+
+    if (fs.existsSync(homeDir) && fs.statSync(homeDir).isDirectory()) {
+        // Read all MDX files in the "home" directory
+        const files = fs.readdirSync(homeDir);
+        for (const file of files) {
+            if (file.endsWith(".mdx")) {
+                const filePath = path.join(homeDir, file);
+                const fileContent = fs.readFileSync(filePath, "utf8");
+                const matterResult = matter(fileContent);
+
+                // Use remark to convert markdown into an HTML string
+                const processedContent = await remark()
+                    .use(html)
+                    .process(matterResult.content);
+                const contentHtml = processedContent.toString();
+
+                posts.push({
+                    lang,              // Language (e.g., 'ua')
+                    section: "home",   // Section is fixed as "home"
+                    slug: null,        // No slug since files are at the section level
+                    filename: file,
+                    content: contentHtml,
+                    frontMatter: matterResult.data,
+                });
+            }
+        }
+    }
+
+    return { posts };
+}
+
 
 export interface CardData {
     title: string;
@@ -83,21 +115,29 @@ const cardsData = [
     },
 ]
 
-
 export const homeItems: HomeItem[] = [
-    { title: "small-format", article_ua: SmallFormatUA, article_ru: SmallFormatRU, image: "small-format.jpg", cardsData: cardsData },
-    { title: "large-format", article_ua: LargeFormatUA, article_ru: LargeFormatRU, image: "large-format.png", cardsData: cardsData },
-    { title: "services", article_ua: ServicesUA, article_ru: ServicesRU, image: "services.png", cardsData: cardsData },
+    { title: "small-format", article: null, image: "small-format.jpg", cardsData: cardsData },
+    { title: "large-format", article: null, image: "large-format.png", cardsData: cardsData },
+    { title: "services", article: null, image: "services.png", cardsData: cardsData },
 ]
 
-export default function HomePage({ t, lang }: BasePageProps) {
+export default async function HomePage({ lang }: BasePageProps) {
+    const posts = await getHomePosts(lang);
+
+    const homeItemsWithArticles: HomeItem[] = homeItems.map(item => ({
+        ...item,
+        article: posts.posts.find(post => {
+            const fileNameWithoutExt = post.filename.replace(/\.[^/.]+$/, "");
+            return fileNameWithoutExt === item.title;
+        })?.content || null,
+    }));
 
     return (
         <SidebarProvider>
-            <AppSidebar t={t} lang={lang} />
+            <AppSidebar lang={lang} />
             <SidebarInset>
                 <div className="flex flex-col justify-center items-center bg-gradient-to-r from-gray-50 to-gray-100">
-                    <Navbar t={t} lang={lang} />
+                    <Navbar lang={lang} />
                     <img
                         src="/home/banner.png"
                         srcSet="
@@ -113,11 +153,11 @@ export default function HomePage({ t, lang }: BasePageProps) {
                         alt="banner"
                         className="alignnone size-full hidden lg:block"
                     ></img>
-                    <CardsGrid t={t} lang={lang} item={homeItems[0]} />
-                    <CardsGrid t={t} lang={lang} item={homeItems[1]} />
-                    <CardsGrid t={t} lang={lang} item={homeItems[2]} />
-                    <HeroSection t={t} lang={lang} />
-                    <Footer t={t} lang={lang} />
+                    <CardsGrid lang={lang} item={homeItemsWithArticles[0]} />
+                    <CardsGrid lang={lang} item={homeItemsWithArticles[1]} />
+                    <CardsGrid lang={lang} item={homeItemsWithArticles[2]} />
+                    <HeroSection lang={lang} />
+                    <Footer lang={lang} />
                 </div >
             </SidebarInset>
         </SidebarProvider>

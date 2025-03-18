@@ -1,18 +1,37 @@
-"use client";
-
 import HomePage from "../_home";
 
-import { useParams, notFound } from "next/navigation";
+import { notFound } from "next/navigation";
 import { getT } from "@/lib/utils";
+import { Post } from "../_page";
 
-export default function Home() {
-  const { lang } = useParams();
+// Generate static routes at build time:
+export async function generateStaticParams() {
+  // Possible languages
+  const langs = ["ua", "ru"];
+
+  // Generate all combinations of { lang, slug }
+  const params: Array<{ lang: string }> = [];
+
+
+  for (const lang of langs) {
+    params.push({ lang });
+  }
+
+  return params;
+}
+
+export default async function CustomPage({
+  params,
+}: {
+  params: { lang: string };
+}) {
+  const { lang, } = await params;
+
   if (!lang || (lang !== "ua" && lang !== "ru")) {
     notFound();
   }
-  const t = getT(lang as string, "home");
 
   return HomePage(
-    { t, lang },
+    { lang },
   );
 }

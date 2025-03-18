@@ -12,8 +12,8 @@ import {
 import { BasePageProps } from "@/app/_page"
 import { getT } from "@/lib/utils";
 
-export function CarouselSize({ t, lang }: BasePageProps) {
-    t = getT(lang, "carousel");
+export function CarouselSize({ lang }: BasePageProps) {
+    const t = getT(lang, "carousel");
     return (
         <Carousel
             opts={{

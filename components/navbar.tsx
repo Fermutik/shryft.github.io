@@ -10,8 +10,8 @@ import { Separator } from "./ui/separator";
 // Navbar component with two rows.
 // Top row contains the Logo and images, centered on the screen.
 // Bottom row uses grid layout with three columns to align SidebarTrigger exactly with the Logo.
-export const Navbar = ({ t, lang }: BasePageProps) => {
-    t = getT(lang, "navbar");
+export const Navbar = ({ lang }: BasePageProps) => {
+    const t = getT(lang, "navbar");
     return (
         <div className="flex flex-col w-full">
             {/* Top row with logo and images centered on the screen */}
@@ -49,7 +49,7 @@ export const Navbar = ({ t, lang }: BasePageProps) => {
                     </div>
                     {/* Center column: Navigation menu */}
                     <div className="flex justify-center">
-                        <SiteNavigationMenu t={t} lang={lang} />
+                        <SiteNavigationMenu lang={lang} />
                     </div>
                 </div>
             </div >

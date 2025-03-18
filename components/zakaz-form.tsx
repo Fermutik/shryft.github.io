@@ -52,9 +52,9 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 
-export const ZakazForm = ({ t, lang }: BasePageProps) => {
+export const ZakazForm = ({ lang }: BasePageProps) => {
     // Get translation function for the "zakaz-form" namespace
-    t = getT(lang, "zakaz-form")
+    const t = getT(lang, "zakaz-form")
 
     // Define form schema using translations for validation messages.
     // The schema is defined inside the component so that t() is available.

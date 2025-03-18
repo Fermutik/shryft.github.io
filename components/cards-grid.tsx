@@ -16,10 +16,9 @@ interface CardsGridProps extends BasePageProps {
     item: HomeItem;
 }
 
-export function CardsGrid({ t, lang, item }: CardsGridProps) {
-    t = getT(lang, "menu");
+export function CardsGrid({ lang, item }: CardsGridProps) {
+    const t = getT(lang, "menu");
 
-    const ArticleComponent = lang === "ua" ? item.article_ua : item.article_ru;
 
     return (
         <>
@@ -28,7 +27,7 @@ export function CardsGrid({ t, lang, item }: CardsGridProps) {
                     <div className="p-8">
                         <h1 className="font-gilroy text-2xl md:text-3xl">{t(item.title)}</h1>
                         <CardDescription className="mt-4 leading-relaxed prose">
-                            <ArticleComponent />
+                            <div dangerouslySetInnerHTML={{ __html: item.article }} />
                         </CardDescription>
                     </div>
                 </Card>

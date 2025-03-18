@@ -17,7 +17,8 @@
     "price-tags": "Ценники",
     "flyers": "Флаеры",
     "booklets": "Буклеты",
-    "notepads": "Блокноты и тетради",
+    "notepads": "Блокноты",
+    "notebooks": "Тетради",
     "hangers": "Вешалки",
     "books": "Книги",
     "envelopes": "Конверты",
@@ -26,7 +27,7 @@
     "drawings": "Чертежи",
     "tablets": "Планшеты",
     "tracing-paper-print": "Печать на кальке",
-    "posters-bills": "Плакаты, афиши",
+    "posters": "Плакаты",
     "self-adhesive-print": "Печать на самоклейке",
     "photo-wallpaper": "Фотошпалеры",
     "oracal-print": "Печать на оракале",
@@ -61,5 +62,7 @@
     "contacts": "Контакты",
     "blog": "Блог",
     "about-us": "О нас",
-    "news": "Новости"
+    "news": "Новости",
+    "main": "Главная",
+    "bills": "Афиши"
 }

@@ -2,8 +2,8 @@ import { BasePageProps } from "@/app/_page"
 import { getT } from "@/lib/utils";
 
 // Navbar component fixed at the top with the title on the left and the toggle on the right.
-export const Footer = ({ t, lang }: BasePageProps) => {
-    t = getT(lang, "footer");
+export const Footer = ({ lang }: BasePageProps) => {
+    const t = getT(lang, "footer");
     return (
         <div className="flex flex-col w-full mt-4">
             <div className="flex h-[50px] text-sm lg:text-lg bg-black dark:bg-white text-white dark:text-black items-center justify-center">

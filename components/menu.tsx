@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import Link from "next/link"
 
@@ -27,7 +25,6 @@ export const smallFormatItems = [
     { title: "stickers-stickerpacks", href: "/small-format/stickers-stickerpacks" },
     { title: "diplomas-acknowledgments", href: "/small-format/diplomas-acknowledgments" },
     { title: "catalogs", href: "/small-format/catalogs" },
-    { title: "patterns", href: "/small-format/patterns" },
     { title: "forms", href: "/small-format/forms" },
     { title: "badges", href: "/small-format/badges" },
     { title: "certificates", href: "/small-format/certificates" },
@@ -45,13 +42,16 @@ export const smallFormatItems = [
     { title: "envelopes", href: "/small-format/envelopes" },
     { title: "labels", href: "/small-format/labels" },
     { title: "shaped-paper-products", href: "/small-format/shaped-paper-products" },
+    { title: "notebooks", href: "/small-format/notebooks" },
+    { title: "bills", href: "/small-format/bills" },
 ];
 
 export const largeFormatItems = [
     { title: "drawings", href: "/large-format/drawings" },
     { title: "tablets", href: "/large-format/tablets" },
+    { title: "patterns", href: "/large-format/patterns" },
     { title: "tracing-paper-print", href: "/large-format/tracing-paper-print" },
-    { title: "posters-bills", href: "/large-format/posters-bills" },
+    { title: "posters", href: "/large-format/posters" },
     { title: "self-adhesive-print", href: "/large-format/self-adhesive-print" },
     { title: "photo-wallpaper", href: "/large-format/photo-wallpaper" },
     { title: "oracal-print", href: "/large-format/oracal-print" },
@@ -93,8 +93,8 @@ export const blogItems = [
 ];
 
 
-export function SiteNavigationMenu({ t, lang }: BasePageProps) {
-    t = getT(lang, "menu");
+export function SiteNavigationMenu({ lang }: BasePageProps) {
+    const t = getT(lang, "menu");
     return (
         <NavigationMenu className="hidden lg:block">
             <NavigationMenuList>
