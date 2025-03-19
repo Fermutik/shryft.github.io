@@ -31,7 +31,7 @@ export async function getHomePosts(lang: string = "ua") {
         // Read all MDX files in the "home" directory
         const files = fs.readdirSync(homeDir);
         for (const file of files) {
-            if (file.endsWith(".mdx")) {
+            if (file.endsWith(".md")) {
                 const filePath = path.join(homeDir, file);
                 const fileContent = fs.readFileSync(filePath, "utf8");
                 const matterResult = matter(fileContent);
@@ -64,7 +64,7 @@ export interface CardData {
     description: string;
 }
 
-const cardsData = [
+const cardsData01 = [
     {
         title: "presentations",
         image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
@@ -72,25 +72,25 @@ const cardsData = [
             "Это описание для каталогов. Здесь будет вторая часть описания.",
     },
     {
-        title: "brochures",
+        title: "architectural-projects",
         image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
         description:
             "Это описание для лекал. Здесь будет вторая часть описания.",
     },
     {
-        title: "booklets",
+        title: "stickers-stickerpacks",
         image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
         description:
             "Это описание для бланков. Здесь будет вторая часть описания.",
     },
     {
-        title: "hangers",
+        title: "bills",
         image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
         description:
             "Это описание для бейджей. Здесь будет вторая часть описания.",
     },
     {
-        title: "books",
+        title: "diplomas-acknowledgments",
         image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
         description:
             "Это описание для сертификатов. Здесь будет вторая часть описания.",
@@ -102,13 +102,115 @@ const cardsData = [
             "Это описание для визиток. Здесь будет вторая часть описания.",
     },
     {
-        title: "patterns",
+        title: "badges",
         image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
         description:
             "Это описание для листовок. Здесь будет вторая часть описания.",
     },
     {
-        title: "badges",
+        title: "postcards",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для бирок. Здесь будет вторая часть описания.",
+    },
+]
+
+const cardsData02 = [
+    {
+        title: "drawings",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для каталогов. Здесь будет вторая часть описания.",
+    },
+    {
+        title: "tablets",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для лекал. Здесь будет вторая часть описания.",
+    },
+    {
+        title: "tracing-paper-print",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для бланков. Здесь будет вторая часть описания.",
+    },
+    {
+        title: "posters",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для бейджей. Здесь будет вторая часть описания.",
+    },
+    {
+        title: "patterns",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для сертификатов. Здесь будет вторая часть описания.",
+    },
+    {
+        title: "self-adhesive-print",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для визиток. Здесь будет вторая часть описания.",
+    },
+    {
+        title: "canvas-print",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для листовок. Здесь будет вторая часть описания.",
+    },
+    {
+        title: "oracal-print",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для бирок. Здесь будет вторая часть описания.",
+    },
+]
+
+const cardsData03 = [
+    {
+        title: "color-print",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для каталогов. Здесь будет вторая часть описания.",
+    },
+    {
+        title: "large-format-print",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для лекал. Здесь будет вторая часть описания.",
+    },
+    {
+        title: "sheet-print",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для бланков. Здесь будет вторая часть описания.",
+    },
+    {
+        title: "lamination",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для бейджей. Здесь будет вторая часть описания.",
+    },
+    {
+        title: "hard-cover",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для сертификатов. Здесь будет вторая часть описания.",
+    },
+    {
+        title: "soft-cover",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для визиток. Здесь будет вторая часть описания.",
+    },
+    {
+        title: "digital-banner-print",
+        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
+        description:
+            "Это описание для листовок. Здесь будет вторая часть описания.",
+    },
+    {
+        title: "plotter-cutting",
         image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
         description:
             "Это описание для бирок. Здесь будет вторая часть описания.",
@@ -116,9 +218,9 @@ const cardsData = [
 ]
 
 export const homeItems: HomeItem[] = [
-    { title: "small-format", article: null, image: "small-format.jpg", cardsData: cardsData },
-    { title: "large-format", article: null, image: "large-format.png", cardsData: cardsData },
-    { title: "services", article: null, image: "services.png", cardsData: cardsData },
+    { title: "small-format", article: null, image: "small-format.jpg", cardsData: cardsData01 },
+    { title: "large-format", article: null, image: "large-format.png", cardsData: cardsData02 },
+    { title: "services", article: null, image: "services.png", cardsData: cardsData03 },
 ]
 
 export default async function HomePage({ lang }: BasePageProps) {

@@ -87,7 +87,7 @@ export async function getStaticProps() {
                     for (const item of items) {
                         const itemPath = path.join(sectionPath, item);
                         const stats = fs.statSync(itemPath);
-                        if (stats.isFile() && item.endsWith(".mdx")) {
+                        if (stats.isFile() && item.endsWith(".md")) {
                             // MDX file directly in the section (no slug)
                             const fileContent = fs.readFileSync(itemPath, "utf8");
                             const matterResult = matter(fileContent);
@@ -110,7 +110,7 @@ export async function getStaticProps() {
                             // Read all MDX files within this slug directory
                             const files = fs.readdirSync(itemPath);
                             for (const file of files) {
-                                if (file.endsWith(".mdx")) {
+                                if (file.endsWith(".md")) {
                                     const filePath = path.join(itemPath, file);
                                     const fileContent = fs.readFileSync(filePath, "utf8");
                                     const matterResult = matter(fileContent);
@@ -145,10 +145,8 @@ export async function getStaticProps() {
 }
 
 export function makeBreadcrumbs(lang: string, rootSegment: string, slug?: string) {
-    // Функция для перевода, например, t_menu("blog")
     const t_menu = getT(lang, "menu");
 
-    // Начинаем с массива, где первый пункт — главная страница
     const crumbs = [
         {
             label: t_menu("main").toUpperCase(),
@@ -160,7 +158,6 @@ export function makeBreadcrumbs(lang: string, rootSegment: string, slug?: string
         },
     ];
 
-    // Если у нас передан `slug`, добавим третий уровень
     if (slug) {
         crumbs.push({
             label: (t_menu(slug) || slug).toUpperCase(),
@@ -185,10 +182,10 @@ export default function BasePage(
 ) {
     // Extract MDX content for public and hidden articles based on filename
     const publicArticle = posts.find(
-        (post) => post.filename === "article-public.mdx"
+        (post) => post.filename === "article-public.md"
     );
     const hideArticle = posts.find(
-        (post) => post.filename === "article-hide.mdx"
+        (post) => post.filename === "article-hide.md"
     );
 
     const t_menu = getT(lang, "menu");
@@ -254,12 +251,11 @@ export default function BasePage(
                                     ))}
                                 </BreadcrumbList>
                             </Breadcrumb>
-                            <Separator className="mb-4" />
+                            <Separator />
                             {accordion_public ? (
                                 <Accordion type="single" collapsible>
                                     <AccordionItem value="item-1">
                                         <AccordionPublic className="dark:text-gray-200">
-                                            {/* Render public article MDX content */}
                                             {publicArticle ? (
                                                 <div dangerouslySetInnerHTML={{ __html: publicArticle.content }} />
                                             ) : (
@@ -267,7 +263,6 @@ export default function BasePage(
                                             )}
                                         </AccordionPublic>
                                         <AccordionHide>
-                                            {/* Render hidden article MDX content */}
                                             {hideArticle ? (
                                                 <div dangerouslySetInnerHTML={{ __html: hideArticle.content }} />
                                             ) : (
@@ -282,7 +277,6 @@ export default function BasePage(
                                 </Accordion>
                             ) : (
                                 <div className="prose">
-                                    {/* When accordion is disabled, render only public article */}
                                     {publicArticle ? (
                                         <div dangerouslySetInnerHTML={{ __html: publicArticle.content }} />
                                     ) : (

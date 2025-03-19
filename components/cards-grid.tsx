@@ -19,7 +19,6 @@ interface CardsGridProps extends BasePageProps {
 export function CardsGrid({ lang, item }: CardsGridProps) {
     const t = getT(lang, "menu");
 
-
     return (
         <>
             <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
@@ -31,7 +30,7 @@ export function CardsGrid({ lang, item }: CardsGridProps) {
                         </CardDescription>
                     </div>
                 </Card>
-                <div className="col-span-1 sm:col-span-2 lg:col-span-2 hidden lg:flex shadow-none border-nonerounded-lg">
+                <div className="col-span-1 sm:col-span-2 lg:col-span-2 hidden lg:flex justify-center items-center shadow-none border-nonerounded-lg">
                     <Image
                         src={"/home/" + item.image}
                         width="662"
