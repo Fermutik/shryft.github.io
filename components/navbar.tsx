@@ -17,7 +17,7 @@ export const Navbar = ({ lang }: BasePageProps) => {
             {/* Top row with logo and images centered on the screen */}
             <div className="flex h-[130px] justify-center items-center">
                 <div className="flex items-center">
-                    <Link href={"/"} className="flex justify-end items-center lg:pr-2 pr-2">
+                    <Link href={"/" + lang} className="flex justify-end items-center lg:pr-2 pr-2">
                         <svg className="lg:w-[220px] w-[180px] h-[125px]" xmlns="http://www.w3.org/2000/svg">
                             <image href="/logo.svg" width="100%" height="100%" />
                         </svg>

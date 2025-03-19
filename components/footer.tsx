@@ -7,7 +7,7 @@ export const Footer = ({ lang }: BasePageProps) => {
     return (
         <div className="flex flex-col w-full mt-4 bg-black text-white">
             {/* Top header area with title */}
-            <div className="flex h-[50px] text-sm lg:text-lg items-center justify-center">
+            <div className="flex h-[50px] text-sm lg:text-lg items-center justify-center shadow-md bg-gray-900">
                 <h2 className="text-center">{t("title")}</h2>
             </div>
 
