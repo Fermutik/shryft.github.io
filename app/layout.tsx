@@ -17,14 +17,18 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={gilroy.className}>
+    <html suppressHydrationWarning className={gilroy.className}>
       <head>
+        <noscript>
+          <div style={{ margin: '20px', fontSize: '16px', textAlign: 'center' }}>
+            Будь ласка, увімкніть JavaScript у своєму браузері.
+          </div>
+        </noscript>
+
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
-                // English comments/logs:
-                // Parse cookies in pure JS.
                 var cookies = document.cookie.split('; ').reduce(function(acc, cookieStr) {
                   var parts = cookieStr.split('=');
                   acc[parts[0]] = parts[1];
