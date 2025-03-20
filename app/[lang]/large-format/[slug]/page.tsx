@@ -24,10 +24,10 @@ export async function generateStaticParams() {
 export default async function CustomPage({
     params,
 }: {
-    params: { lang: string; slug: string };
+    params: any;
 }) {
-    const resolvedParams = await params;
-    const { lang, slug } = resolvedParams;
+
+    const { lang, slug } = (await Promise.resolve(params)) as { lang: string; slug: string };
 
     if (!lang || (lang !== "ua" && lang !== "ru")) {
         notFound();

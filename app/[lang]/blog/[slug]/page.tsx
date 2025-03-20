@@ -24,10 +24,10 @@ export async function generateStaticParams() {
 export default async function CustomPage({
     params,
 }: {
-    params: { lang: string; slug: string };
+    params: any;
 }) {
-    const resolvedParams = await params;
-    const { lang, slug } = resolvedParams;
+    // Ensure params is treated as a Promise and then cast to the expected type
+    const { lang, slug } = (await Promise.resolve(params)) as { lang: string; slug: string };
 
     if (!lang || (lang !== "ua" && lang !== "ru")) {
         notFound();
@@ -54,8 +54,8 @@ export default async function CustomPage({
 
     return BasePage(
         { lang, breadcrumbs },
-        { title: slug, form: true, image: false, post_article: false, carousel: false, posts: filteredPosts, }
+        { title: slug, form: true, image: false, post_article: false, carousel: false, posts: filteredPosts }
     );
 }
 
-export const dynamicParams = false
+export const dynamicParams = false;
