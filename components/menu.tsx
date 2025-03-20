@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/navigation-menu"
 import { BasePageProps } from "@/app/_page"
 import { getT } from "@/lib/utils";
-import { MenuIcon } from "@/components/lucid_icons"
 
 // Updated arrays with English titles based on the provided JSON mapping
 
@@ -91,6 +90,30 @@ export const blogItems = [
     { title: "news", href: "/blog/news" },
     { title: "about-us", href: "/blog/about-us" }
 ];
+
+export function createLocalePath(lang: string, title: string): string {
+    // Combine all menu items arrays into one list
+    const allItems = [
+        ...smallFormatItems,
+        ...largeFormatItems,
+        ...servicesItems,
+        ...supportItems,
+        ...blogItems,
+    ];
+
+    // Find the menu item with the given title
+    const foundItem = allItems.find(item => item.title === title);
+
+    if (foundItem) {
+        // Prepend the language code to the found href. 
+        // foundItem.href already starts with a slash.
+        return `/${lang}${foundItem.href}`;
+    }
+
+    // Fallback: if not found, return a default localized path
+    return `/${lang}/${title}`;
+}
+
 
 
 export function SiteNavigationMenu({ lang }: BasePageProps) {

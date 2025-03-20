@@ -1,8 +1,12 @@
 import { BasePageProps } from "@/app/_page"
 import { getT } from "@/lib/utils";
+import Link from "next/link";
+import { createLocalePath } from "./menu";
 
 export const Footer = ({ lang }: BasePageProps) => {
     const t = getT(lang, "footer");
+    const t_menu = getT(lang, "menu");
+
 
     return (
         <div className="flex flex-col w-full mt-4 bg-black text-white">
@@ -12,62 +16,55 @@ export const Footer = ({ lang }: BasePageProps) => {
             </div>
 
             {/* Three-column content area */}
-            <div className="flex justify-center items-center w-full mx-auto px-4">
-                {/* 
-                <div className="hidden md:block w-1/5">
-                    <img src="https://placehold.co/155x110/cccccc/ffffff?Image+Placeholder" alt="Placeholder" />
-                </div>
-                 */}
+            <div className="flex justify-center items-center w-full mx-auto px-4 mb-4 mt-4">
+
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-32 text-gray-400">
-                    {/* Column 1 */}
                     <div className="space-y-1">
-                        <p><b>Малоформатна продукція</b></p>
-                        <p>Презентації</p>
-                        <p>Брошури</p>
-                        <p>Архітектурні проекти</p>
-                        <p>Наліпки та стікерпаки</p>
-                        <p>Афіші</p>
-                        <p>Дипломи та подяки</p>
-                        <p>Каталоги</p>
-                        <p>Бланки</p>
-                        <p>Бейджі</p>
-                        <p>Сертифікати</p>
-                        <p>Листівки</p>
-                        <p>Етикетки</p>
+                        <p><b>{t_menu("small-format")}</b></p>
+                        <p><Link href={createLocalePath(lang, "presentations")} passHref>{t_menu("presentations")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "brochures")} passHref>{t_menu("brochures")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "architectural-projects")} passHref>{t_menu("architectural-projects")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "stickers-stickerpacks")} passHref>{t_menu("stickers-stickerpacks")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "bills")} passHref>{t_menu("bills")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "diplomas-acknowledgments")} passHref>{t_menu("diplomas-acknowledgments")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "catalogs")} passHref>{t_menu("catalogs")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "forms")} passHref>{t_menu("forms")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "badges")} passHref>{t_menu("badges")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "certificates")} passHref>{t_menu("certificates")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "postcards")} passHref>{t_menu("postcards")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "labels")} passHref>{t_menu("labels")}</Link></p>
                     </div>
 
-                    {/* Column 2 */}
                     <div className="space-y-1">
-                        <p><b>Широкоформатна продукція</b></p>
-                        <p>Креслення</p>
-                        <p>Планшети</p>
-                        <p>Друк на кальці</p>
-                        <p>Плакати</p>
-                        <p>Лекала</p>
-                        <p>Друк на самоклейці</p>
-                        <p>Друк на холсті</p>
-                        <p>Друк на оракалі</p>
-                        <p>Друк на банері</p>
-                        <p>Банер Павук</p>
-                        <p>Банер Ролл-ап</p>
-                        <p>Фотошпалери</p>
+                        <p><b>{t_menu("large-format")}</b></p>
+                        <p><Link href={createLocalePath(lang, "drawings")} passHref>{t_menu("drawings")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "tablets")} passHref>{t_menu("tablets")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "tracing-paper-print")} passHref>{t_menu("tracing-paper-print")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "posters")} passHref>{t_menu("posters")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "patterns")} passHref>{t_menu("patterns")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "self-adhesive-print")} passHref>{t_menu("self-adhesive-print")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "canvas-print")} passHref>{t_menu("canvas-print")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "oracal-print")} passHref>{t_menu("oracal-print")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "banner-print")} passHref>{t_menu("banner-print")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "spider-banner")} passHref>{t_menu("spider-banner")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "roll-up-banner")} passHref>{t_menu("roll-up-banner")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "photo-wallpaper")} passHref>{t_menu("photo-wallpaper")}</Link></p>
                     </div>
 
-                    {/* Column 3 */}
                     <div className="space-y-1">
-                        <p><b>Послуги</b></p>
-                        <p>Кольоровий друк</p>
-                        <p>Чорно білий друк</p>
-                        <p>Широкоформатний друк</p>
-                        <p>Друк в аркушах</p>
-                        <p>Ламінування</p>
-                        <p>Тверда обкладинка</p>
-                        <p>М’яка обкладинка</p>
-                        <p>Цифровий банерний друк</p>
-                        <p>Плотерна порізка</p>
-                        <p>Офсетний друк</p>
-                        <p>Післядрукарська обробка</p>
-                        <p>Персоналізація</p>
+                        <p><b>{t_menu("services")}</b></p>
+                        <p><Link href={createLocalePath(lang, "color-print")} passHref>{t_menu("color-print")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "black-and-white-print")} passHref>{t_menu("black-and-white-print")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "large-format-print")} passHref>{t_menu("large-format-print")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "sheet-print")} passHref>{t_menu("sheet-print")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "lamination")} passHref>{t_menu("lamination")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "hard-cover")} passHref>{t_menu("hard-cover")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "soft-cover")} passHref>{t_menu("soft-cover")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "digital-banner-print")} passHref>{t_menu("digital-banner-print")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "plotter-cutting")} passHref>{t_menu("plotter-cutting")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "offset-printing")} passHref>{t_menu("offset-printing")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "post-print-processing")} passHref>{t_menu("post-print-processing")}</Link></p>
+                        <p><Link href={createLocalePath(lang, "personalization")} passHref>{t_menu("personalization")}</Link></p>
                     </div>
                 </div>
             </div>
