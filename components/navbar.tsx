@@ -7,14 +7,10 @@ import { SiteNavigationMenu } from "@/components/menu";
 import { SidebarTrigger } from "./ui/sidebar";
 import { Separator } from "./ui/separator";
 
-// Navbar component with two rows.
-// Top row contains the Logo and images, centered on the screen.
-// Bottom row uses grid layout with three columns to align SidebarTrigger exactly with the Logo.
 export const Navbar = ({ lang }: BasePageProps) => {
     const t = getT(lang, "navbar");
     return (
         <div className="flex flex-col w-full">
-            {/* Top row with logo and images centered on the screen */}
             <div className="flex h-[130px] justify-center items-center">
                 <div className="flex items-center">
                     <Link href={"/" + lang} className="flex flex-col items-center lg:pr-2 pr-2">
@@ -43,11 +39,9 @@ export const Navbar = ({ lang }: BasePageProps) => {
                         <div className="text-base lg:text-lg font-bold">{t("email")}</div>
                     </div>
                 </div>
-            </div >
-            {/* Bottom row with navigation menu and sidebar trigger */}
+            </div>
             < div className="w-full text-sm lg:text-lg h-[50px] bg-black dark:bg-white text-white dark:text-black" >
                 <div className="container mx-auto grid grid-cols-3 items-center h-full">
-                    {/* Left column: SidebarTrigger aligned with Logo */}
                     <div className="flex px-2 items-center">
                         <SidebarTrigger className="lg:hidden flex items-center justify-center" />
                         <Separator
@@ -55,12 +49,11 @@ export const Navbar = ({ lang }: BasePageProps) => {
                             className="mr-2 data-[orientation=vertical]:h-4 lg:hidden flex"
                         />
                     </div>
-                    {/* Center column: Navigation menu */}
                     <div className="flex justify-center">
                         <SiteNavigationMenu lang={lang} />
                     </div>
                 </div>
-            </div >
-        </div >
+            </div>
+        </div>
     );
 };
