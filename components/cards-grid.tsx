@@ -11,6 +11,8 @@ import { BasePageProps } from "@/app/_page"
 import { getT } from "@/lib/utils"
 import { HomeItem } from "@/app/_home"
 import Image from "next/image";
+import Link from "next/link"
+import { createLocalePath } from "./menu"
 
 interface CardsGridProps extends BasePageProps {
     item: HomeItem;
@@ -43,29 +45,30 @@ export function CardsGrid({ lang, item }: CardsGridProps) {
 
             <div className="mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8 px-4 sm:px-0">
                 {item.cardsData.map((card, index) => (
-                    <Card
-                        key={index}
-                        className="max-w-xs mx-auto bg-white border border-gray-100 rounded-lg shadow-md hover:shadow-lg transition-shadow"
-                    >
-                        <CardHeader className="pb-2">
-                            <CardTitle className="text-xl font-semibold text-gray-800 flex flex-row justify-start items-center">
-                                <div className="flex items-center justify-center w-12 h-12 bg-orange-100 text-primary rounded-full mr-3">
-                                    <MenuIcon menuKey={card.title as any} className="w-4 h-4 flex-shrink-0" />
-                                </div>
-                                {t(card.title)}
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="flex flex-col items-center">
-                            <img
-                                src={card.image}
-                                alt={card.title}
-                                className="mb-4 w-full h-auto object-cover rounded-md"
-                            />
-                            <p className="text-sm text-gray-600 leading-relaxed">
-                                {card.description}
-                            </p>
-                        </CardContent>
-                    </Card>
+                    <Link key={index} href={createLocalePath(lang, card.title)} passHref>
+                        <Card
+                            className="max-w-xs mx-auto bg-white border border-gray-100 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                        >
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-xl font-semibold text-gray-800 flex flex-row justify-start items-center">
+                                    <div className="flex items-center justify-center w-12 h-12 bg-orange-100 text-primary rounded-full mr-3">
+                                        <MenuIcon menuKey={card.title as any} className="w-4 h-4 flex-shrink-0" />
+                                    </div>
+                                    {t(card.title)}
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="flex flex-col items-center">
+                                <img
+                                    src={card.image}
+                                    alt={card.title}
+                                    className="mb-4 w-full h-auto object-cover rounded-md"
+                                />
+                                <p className="text-sm text-gray-600 leading-relaxed">
+                                    {card.description}
+                                </p>
+                            </CardContent>
+                        </Card>
+                    </Link>
                 ))}
             </div>
         </>
