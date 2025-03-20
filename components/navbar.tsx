@@ -26,8 +26,7 @@ export const Navbar = ({ lang }: BasePageProps) => {
                     </Link>
                     <img
                         className="hidden xl:block pr-4"
-                        src="/banner.png"
-                        alt="banner"
+                        src="/home/navbar.png"
                     />
                     <div className=" lg:w-[220px] flex flex-col self-center items-start">
                         <div className="text-lg lg:text-xl font-bold tracking-wide">

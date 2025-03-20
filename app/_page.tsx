@@ -41,6 +41,7 @@ export interface Post {
     slug: string | null;
     filename: string;
     content: any;
+    image: string | null;
 }
 
 export interface BasePageSettings {
@@ -103,6 +104,7 @@ export async function getStaticProps() {
                                 slug: null,   // No slug because file is at the section level
                                 filename: item,
                                 content: contentHtml,
+                                image: null,
                             });
                         } else if (stats.isDirectory()) {
                             // Item is a directory, treat it as a slug directory
@@ -120,12 +122,16 @@ export async function getStaticProps() {
                                         .use(html)
                                         .process(matterResult.content);
                                     const contentHtml = processedContent.toString();
+
+                                    const ImagePath = path.join(process.cwd(), "public", section, slug + ".png");
+                                    const Image = fs.existsSync(ImagePath) && "/" + section + "/" + slug + ".png"
                                     posts.push({
                                         lang,         // Language (e.g., 'ua')
                                         section,      // Section (e.g., 'services')
                                         slug,         // Slug (e.g., 'black-and-white-print')
                                         filename: file,
                                         content: contentHtml,
+                                        image: Image,
                                     });
                                 }
                             }
@@ -135,6 +141,7 @@ export async function getStaticProps() {
             }
         }
     }
+
 
     // Return the array of posts as props
     return {
@@ -188,6 +195,9 @@ export default function BasePage(
         (post) => post.filename === "article-hide.md"
     );
 
+    const image_src =
+        posts.find((post) => post.image)?.image
+
     const t_menu = getT(lang, "menu");
 
     const t = getT(lang, "page");
@@ -199,32 +209,22 @@ export default function BasePage(
                 <div className="flex flex-col justify-center items-center">
                     <Navbar lang={lang} />
                     <div className="flex flex-row justify-start">
-                        <div className="flex-col items-center text-center mt-20 hidden lg:block px-8">
-                            {image ? (
-                                // When 'image' is true, render the custom Image component
-                                <Image
-                                    src={`/${title}.png`}
-                                    width={360}
-                                    height={504}
-                                    alt={t_menu(title)}
-                                />
-                            ) : title === "notepads" ? (
-                                <Image
-                                    src={`/${title}.png`}
-                                    width={360}
-                                    height={504}
-                                    alt={t_menu(title)}
-                                />
-                            ) : (
-                                // When 'image' is false, render a placeholder image
-                                <img
-                                    src="https://placehold.co/350x350/cccccc/ffffff?Image+Placeholder"
-                                    width="350"
-                                    height="350"
-                                    alt={t_menu(title)}
-                                />
-                            )}
-                        </div>
+                        {image && (
+                            <div className="flex-col items-center text-center mt-20 hidden lg:block px-8">
+                                {image_src ? (
+                                    <Image
+                                        src={image_src}
+                                        width={350}
+                                        height={350}
+                                        alt={t_menu(title)}
+                                    />) : (<img
+                                        src="https://placehold.co/350x350/cccccc/ffffff"
+                                        width="350"
+                                        height="350"
+                                        alt={t_menu(title)}
+                                    />)}
+                            </div>
+                        )}
                         <div className="ml-[10px] mt-2">
                             <h1 className="text-2xl lg:text-3xl flex items-center">
                                 {t_menu(title)}
