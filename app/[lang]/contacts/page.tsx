@@ -45,6 +45,6 @@ export default async function CustomPage({
 
     return BasePage(
         { lang, breadcrumbs },
-        { title: "contacts", form: false, image: true, post_article: false, carousel: false, accordion_public: false, posts: filteredPosts }
+        { title: "contacts", form: false, image: true, carousel: false, post_article: false, accordion_article: false, posts: filteredPosts }
     );
 }
