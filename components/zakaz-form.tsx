@@ -164,6 +164,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                 headers: {
                     "Content-Type": "application/json",
                 },
+                mode: "no-cors",
                 body: JSON.stringify(dataToSend),
             });
 
