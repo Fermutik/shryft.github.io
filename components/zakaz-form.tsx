@@ -3,8 +3,17 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as React from "react"
 import { useForm } from "react-hook-form"
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { z } from "zod"
+
+// Add type declaration for Cloudflare Turnstile
+declare global {
+    interface Window {
+        turnstile?: {
+            render: (container: HTMLElement, options: any) => void;
+        };
+    }
+}
 import { Button } from "@/components/ui/button"
 import Attach from "@/components/icons/attach"
 import { CalendarIcon } from "lucide-react"
@@ -57,6 +66,23 @@ import {
 export const ZakazForm = ({ lang }: BasePageProps) => {
     // Get translation function for the "zakaz-form" namespace
     const t = getT(lang, "zakaz-form")
+
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    const captchaRef = useRef<HTMLDivElement>(null);
+
+    // После монтирования и появления элемента запускаем рендеринг капчи
+    useEffect(() => {
+        if (mounted && window.turnstile && captchaRef.current) {
+            window.turnstile.render(captchaRef.current, {
+                sitekey: "0x4AAAAAABB8ZIgIv9VSjJkC",
+                // При необходимости можно добавить другие опции (например, theme, callback и т.д.)
+            });
+        }
+    }, [mounted]);
 
     // Define form schema using translations for validation messages.
     // The schema is defined inside the component so that t() is available.
@@ -243,7 +269,9 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                                 )}
                             />
                         </div>
-
+                        {mounted && (
+                            <div ref={captchaRef} data-size="flexible" className="cf-turnstile" data-sitekey="0x4AAAAAABB8ZIgIv9VSjJkC"></div>
+                        )}
                         <div className="flex flex-row w-full space-x-2 mt-2">
                             <Button type="submit">
                                 {t("Submit")}
