@@ -14,7 +14,6 @@ import matter from "gray-matter";
 import { remark } from 'remark';
 import html from 'remark-html';
 
-
 export interface HomeItem {
     title: string;
     image: string;
@@ -57,175 +56,55 @@ export async function getHomePosts(lang: string = "ua") {
     return { posts };
 }
 
-
 export interface CardData {
     title: string;
-    image: string;
     description: string;
+    image: any;
 }
 
 const cardsData01 = [
-    {
-        title: "presentations",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для каталогов. Здесь будет вторая часть описания.",
-    },
-    {
-        title: "architectural-projects",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для лекал. Здесь будет вторая часть описания.",
-    },
-    {
-        title: "stickers-stickerpacks",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для бланков. Здесь будет вторая часть описания.",
-    },
-    {
-        title: "bills",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для бейджей. Здесь будет вторая часть описания.",
-    },
-    {
-        title: "diplomas-acknowledgments",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для сертификатов. Здесь будет вторая часть описания.",
-    },
-    {
-        title: "catalogs",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для визиток. Здесь будет вторая часть описания.",
-    },
-    {
-        title: "badges",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для листовок. Здесь будет вторая часть описания.",
-    },
-    {
-        title: "postcards",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для бирок. Здесь будет вторая часть описания.",
-    },
-]
+    { title: "presentations", description: "presentations-desc", image: null },
+    { title: "architectural-projects", description: "architectural-projects-desc", image: null },
+    { title: "stickers-stickerpacks", description: "stickers-stickerpacks-desc", image: null },
+    { title: "bills", description: "bills-desc", image: null },
+    { title: "diplomas-acknowledgments", description: "diplomas-acknowledgments-desc", image: null },
+    { title: "catalogs", description: "catalogs-desc", image: null },
+    { title: "badges", description: "badges-desc", image: null },
+    { title: "postcards", description: "postcards-desc", image: null },
+];
 
 const cardsData02 = [
-    {
-        title: "drawings",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для каталогов. Здесь будет вторая часть описания.",
-    },
-    {
-        title: "tablets",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для лекал. Здесь будет вторая часть описания.",
-    },
-    {
-        title: "tracing-paper-print",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для бланков. Здесь будет вторая часть описания.",
-    },
-    {
-        title: "posters",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для бейджей. Здесь будет вторая часть описания.",
-    },
-    {
-        title: "patterns",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для сертификатов. Здесь будет вторая часть описания.",
-    },
-    {
-        title: "self-adhesive-print",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для визиток. Здесь будет вторая часть описания.",
-    },
-    {
-        title: "canvas-print",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для листовок. Здесь будет вторая часть описания.",
-    },
-    {
-        title: "oracal-print",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для бирок. Здесь будет вторая часть описания.",
-    },
-]
+    { title: "drawings", description: "drawings-desc", image: null },
+    { title: "tablets", description: "tablets-desc", image: null },
+    { title: "tracing-paper-print", description: "tracing-paper-print-desc", image: null },
+    { title: "posters", description: "posters-desc", image: null },
+    { title: "patterns", description: "patterns-desc", image: null },
+    { title: "self-adhesive-print", description: "self-adhesive-print-desc", image: null },
+    { title: "canvas-print", description: "canvas-print-desc", image: null },
+    { title: "oracal-print", description: "oracal-print-desc", image: null },
+];
 
 const cardsData03 = [
-    {
-        title: "color-print",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для каталогов. Здесь будет вторая часть описания.",
-    },
-    {
-        title: "large-format-print",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для лекал. Здесь будет вторая часть описания.",
-    },
-    {
-        title: "sheet-print",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для бланков. Здесь будет вторая часть описания.",
-    },
-    {
-        title: "lamination",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для бейджей. Здесь будет вторая часть описания.",
-    },
-    {
-        title: "hard-cover",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для сертификатов. Здесь будет вторая часть описания.",
-    },
-    {
-        title: "soft-cover",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для визиток. Здесь будет вторая часть описания.",
-    },
-    {
-        title: "digital-banner-print",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для листовок. Здесь будет вторая часть описания.",
-    },
-    {
-        title: "plotter-cutting",
-        image: "https://placehold.co/250x150/cccccc/ffffff?Image+Placeholder",
-        description:
-            "Это описание для бирок. Здесь будет вторая часть описания.",
-    },
-]
+    { title: "color-print", description: "color-print-desc", image: null },
+    { title: "large-format-print", description: "large-format-print-desc", image: null },
+    { title: "sheet-print", description: "sheet-print-desc", image: null },
+    { title: "lamination", description: "lamination-desc", image: null },
+    { title: "hard-cover", description: "hard-cover-desc", image: null },
+    { title: "soft-cover", description: "soft-cover-desc", image: null },
+    { title: "digital-banner-print", description: "digital-banner-print-desc", image: null },
+    { title: "plotter-cutting", description: "plotter-cutting-desc", image: null },
+];
 
 export const homeItems: HomeItem[] = [
     { title: "small-format", article: null, image: "small-format.jpg", cardsData: cardsData01 },
     { title: "large-format", article: null, image: "large-format.png", cardsData: cardsData02 },
     { title: "services", article: null, image: "services.png", cardsData: cardsData03 },
-]
+];
 
 export default async function HomePage({ lang }: BasePageProps) {
     const posts = await getHomePosts(lang);
 
+    // Match each home item with its corresponding article (if exists)
     const homeItemsWithArticles: HomeItem[] = homeItems.map(item => ({
         ...item,
         article: posts.posts.find(post => {
@@ -233,6 +112,29 @@ export default async function HomePage({ lang }: BasePageProps) {
             return fileNameWithoutExt === item.title;
         })?.content || null,
     }));
+
+    // Prepare the image src for each HomeItem and for each card inside cardsData
+    const homeItemsPrepared = homeItemsWithArticles.map(item => {
+        // Prepare image for each card in cardsData
+        const preparedCardsData = item.cardsData.map(card => {
+            // Construct path: /public/cards-grid/<homeItem.title>/<card.title>.png
+            const cardImagePath = path.join(
+                process.cwd(),
+                "public",
+                "home",
+                "cards-grid",
+                item.title,
+                `${card.title}.png`
+            );
+            const preparedCardImage = fs.existsSync(cardImagePath)
+                ? `/home/cards-grid/${item.title}/${card.title}.png`
+                : "https://placehold.co/250x150/cccccc/ffffff";
+            card.image = preparedCardImage;
+            return { ...card };
+        });
+        return { ...item, cardsData: preparedCardsData };
+    });
+
 
     return (
         <SidebarProvider>
@@ -254,13 +156,13 @@ export default async function HomePage({ lang }: BasePageProps) {
                         height="600"
                         alt="banner"
                         className="alignnone size-full hidden lg:block"
-                    ></img>
-                    <CardsGrid lang={lang} item={homeItemsWithArticles[0]} />
-                    <CardsGrid lang={lang} item={homeItemsWithArticles[1]} />
-                    <CardsGrid lang={lang} item={homeItemsWithArticles[2]} />
+                    />
+                    <CardsGrid lang={lang} item={homeItemsPrepared[0]} />
+                    <CardsGrid lang={lang} item={homeItemsPrepared[1]} />
+                    <CardsGrid lang={lang} item={homeItemsPrepared[2]} />
                     <HeroSection lang={lang} />
                     <Footer lang={lang} />
-                </div >
+                </div>
             </SidebarInset>
         </SidebarProvider>
     );

@@ -10,7 +10,7 @@ import {
 import { BasePageProps } from "@/app/_page"
 import { getT } from "@/lib/utils"
 import { HomeItem } from "@/app/_home"
-import Image from "next/image";
+import Image from "next/image"
 import Link from "next/link"
 import { createLocalePath } from "./menu"
 
@@ -20,6 +20,7 @@ interface CardsGridProps extends BasePageProps {
 
 export function CardsGrid({ lang, item }: CardsGridProps) {
     const t = getT(lang, "menu");
+    const t_card = getT(lang, "cards-grid");
 
     return (
         <>
@@ -46,9 +47,7 @@ export function CardsGrid({ lang, item }: CardsGridProps) {
             <div className="mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8 px-4 sm:px-0">
                 {item.cardsData.map((card, index) => (
                     <Link key={index} href={createLocalePath(lang, card.title)} passHref>
-                        <Card
-                            className="max-w-xs mx-auto bg-white border border-gray-100 rounded-lg shadow-md hover:shadow-lg transition-shadow"
-                        >
+                        <Card className="max-w-xs mx-auto bg-white border border-gray-100 rounded-lg shadow-md hover:shadow-lg transition-shadow">
                             <CardHeader className="pb-2">
                                 <CardTitle className="text-xl font-semibold text-gray-800 flex flex-row justify-start items-center">
                                     <div className="flex items-center justify-center w-12 h-12 bg-orange-100 text-primary rounded-full mr-3">
@@ -64,7 +63,7 @@ export function CardsGrid({ lang, item }: CardsGridProps) {
                                     className="mb-4 w-full h-auto object-cover rounded-md"
                                 />
                                 <p className="text-sm text-gray-600 leading-relaxed">
-                                    {card.description}
+                                    {t_card(card.description)}
                                 </p>
                             </CardContent>
                         </Card>
