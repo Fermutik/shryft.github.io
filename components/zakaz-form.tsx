@@ -14,6 +14,7 @@ declare global {
         };
     }
 }
+
 import { Button } from "@/components/ui/button"
 import Attach from "@/components/icons/attach"
 import { CalendarIcon } from "lucide-react"
@@ -21,7 +22,6 @@ import { uk, ru } from "react-day-picker/locale";
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -63,29 +63,44 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 
+/**
+ * This component represents a form for user submissions,
+ * including a Cloudflare Turnstile captcha for spam protection.
+ *
+ * Once submitted, the form data is sent to an AWS API Gateway endpoint
+ * which invokes a Lambda function. The Lambda function processes the data,
+ * verifies the captcha, and (optionally) sends emails.
+ */
 export const ZakazForm = ({ lang }: BasePageProps) => {
     // Get translation function for the "zakaz-form" namespace
     const t = getT(lang, "zakaz-form")
 
+    // We'll track component mount state to ensure we only render the captcha when mounted
     const [mounted, setMounted] = useState(false);
     useEffect(() => {
         setMounted(true);
     }, []);
 
+    // Reference to the DOM element for Turnstile
     const captchaRef = useRef<HTMLDivElement>(null);
 
-    // После монтирования и появления элемента запускаем рендеринг капчи
+    // Store the captcha token from Turnstile
+    const [captchaToken, setCaptchaToken] = useState<string>("");
+
+    // Initialize the Turnstile widget after component is mounted
     useEffect(() => {
         if (mounted && window.turnstile && captchaRef.current) {
             window.turnstile.render(captchaRef.current, {
                 sitekey: "0x4AAAAAABB8ZIgIv9VSjJkC",
-                // При необходимости можно добавить другие опции (например, theme, callback и т.д.)
+                // The callback is crucial: it gives us the captcha token on success
+                callback: (token: string) => {
+                    setCaptchaToken(token);
+                },
             });
         }
     }, [mounted]);
 
-    // Define form schema using translations for validation messages.
-    // The schema is defined inside the component so that t() is available.
+    // Define the form schema using Zod
     const formSchema = z.object({
         email: z.string().email({ message: t("InvalidEmail") }),
         username: z
@@ -121,21 +136,67 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
         setSelectedFile(file)
     }
 
-    // Form submit handler: open the alert dialog and reset the form
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        setAlertOpen(true)
-        form.reset()
-        setSelectedFile(null)
+    /**
+     * onSubmit handler: sends a POST request to API Gateway with
+     * form fields + captcha token. On success, shows the AlertDialog.
+     */
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        try {
+            // Convert date to an ISO string or any suitable string format
+            const dobString = values.dob
+                ? values.dob.toISOString().split("T")[0]
+                : null;
+
+            // Prepare the payload, including the captcha token
+            const dataToSend = {
+                username: values.username,
+                email: values.email,
+                tel: values.tel,
+                comment: values.comment,
+                dob: dobString,
+                captcha_token: captchaToken,
+            };
+
+            // Send a POST request to your API Gateway endpoint
+            // (adjust the URL/path if necessary)
+            const response = await fetch("https://k2r6.execute-api.eu-north-1.amazonaws.com", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(dataToSend),
+            });
+
+            if (!response.ok) {
+                console.error("Error from server:", response.status, response.statusText);
+                // You can show an error dialog/toast here
+                return;
+            }
+
+            // Read the JSON response (if your Lambda returns a JSON body)
+            const respJson = await response.json();
+            console.log("Server response:", respJson);
+
+            // If successful, open the AlertDialog
+            setAlertOpen(true);
+
+            // Reset the form fields and clear the selected file
+            form.reset();
+            setSelectedFile(null);
+        } catch (error) {
+            console.error("Error submitting form:", error);
+            // You can show an error dialog/toast here if needed
+        }
     }
 
-    // Reset handler: очистка формы и сброс выбранного файла
+    // Reset handler: clears the form and file
     const handleReset = () => {
-        form.reset()
-        setSelectedFile(null)
+        form.reset();
+        setSelectedFile(null);
     }
 
-    const { isSubmitting, isValid } = form.formState
-    const [date, setDate] = React.useState<Date | undefined>(new Date())
+    const { isSubmitting, isValid } = form.formState;
+    const [date, setDate] = React.useState<Date | undefined>(new Date());
     const locale = lang === "ua" ? uk : ru;
 
     return (
@@ -146,6 +207,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                     className="flex flex-col items-start w-full space-x-2"
                 >
                     <div className="flex flex-col space-y-4 w-full">
+                        {/* Username field */}
                         <FormField
                             control={form.control}
                             name="username"
@@ -164,6 +226,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                             )}
                         />
 
+                        {/* Phone and Email fields */}
                         <div className="flex flex-row space-x-2">
                             <FormField
                                 control={form.control}
@@ -201,6 +264,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                             />
                         </div>
 
+                        {/* Date picker field */}
                         <div className="flex flex-col">
                             <FormField
                                 control={form.control}
@@ -236,6 +300,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                                                     selected={field.value}
                                                     onSelect={field.onChange}
                                                     locale={locale}
+                                                    // You can disable dates in the past, for example
                                                     disabled={(date) => {
                                                         const today = new Date();
                                                         today.setHours(0, 0, 0, 0);
@@ -250,6 +315,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                             />
                         </div>
 
+                        {/* Comment field */}
                         <div className="flex flex-col">
                             <FormField
                                 control={form.control}
@@ -269,33 +335,48 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                                 )}
                             />
                         </div>
+
+                        {/* Cloudflare Turnstile container */}
                         {mounted && (
-                            <div ref={captchaRef} data-size="flexible" className="cf-turnstile" data-sitekey="0x4AAAAAABB8ZIgIv9VSjJkC"></div>
+                            <div
+                                ref={captchaRef}
+                                data-size="flexible"
+                                className="cf-turnstile"
+                                data-sitekey="0x4AAAAAABB8ZIgIv9VSjJkC"
+                            />
                         )}
+
+                        {/* Buttons: Submit, Reset, File upload */}
                         <div className="flex flex-row w-full space-x-2 mt-2">
-                            <Button type="submit">
+                            <Button type="submit" disabled={isSubmitting}>
                                 {t("Submit")}
                             </Button>
                             <Button variant="outline" type="button" onClick={handleReset}>
                                 {t("Reset")}
                             </Button>
-                            <Button variant="outline" type="button" onClick={() => fileInputRef.current?.click()}>
+                            <Button
+                                variant="outline"
+                                type="button"
+                                onClick={() => fileInputRef.current?.click()}
+                            >
                                 {t("SelectFile")}
                             </Button>
                             {selectedFile && (
                                 <TooltipProvider>
                                     <Tooltip>
-                                        <TooltipTrigger><Attach /></TooltipTrigger>
+                                        <TooltipTrigger>
+                                            <Attach />
+                                        </TooltipTrigger>
                                         <TooltipContent>
-                                            <p> {selectedFile.name}</p>
+                                            <p>{selectedFile.name}</p>
                                         </TooltipContent>
                                     </Tooltip>
                                 </TooltipProvider>
-
                             )}
                         </div>
                     </div>
 
+                    {/* Hidden file input */}
                     <input
                         type="file"
                         ref={fileInputRef}
@@ -304,6 +385,8 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                     />
                 </form>
             </Form>
+
+            {/* AlertDialog to confirm successful submission */}
             <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
@@ -317,6 +400,6 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </div >
+        </div>
     )
 }
