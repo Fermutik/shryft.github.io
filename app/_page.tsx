@@ -50,7 +50,8 @@ export interface BasePageSettings {
     image: boolean;
     post_article: boolean;
     carousel?: boolean;
-    accordion_public?: boolean;
+    accordion_article?: boolean;
+    accordion_post_article?: boolean;
     posts: Post[];
 }
 
@@ -63,13 +64,13 @@ import {
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import { remark } from 'remark';
-import html from 'remark-html';
+import { remark } from "remark";
+import html from "remark-html";
 
 export async function getStaticProps() {
-    // Define the base directory for markdown files
+    // Base directory for markdown files
     const markdownDir = path.join(process.cwd(), "markdown");
-    // Initialize an array to hold all post objects
+    // Array to hold all post objects
     const posts = [];
 
     // Read all language directories (e.g., 'ua', 'ru')
@@ -83,7 +84,6 @@ export async function getStaticProps() {
                 const sectionPath = path.join(langPath, section);
                 if (fs.statSync(sectionPath).isDirectory()) {
                     // Read all items in the section directory.
-                    // Items can be MDX files directly in the section or subdirectories (slug directories).
                     const items = fs.readdirSync(sectionPath);
                     for (const item of items) {
                         const itemPath = path.join(sectionPath, item);
@@ -93,7 +93,7 @@ export async function getStaticProps() {
                             const fileContent = fs.readFileSync(itemPath, "utf8");
                             const matterResult = matter(fileContent);
 
-                            // Use remark to convert markdown into HTML string
+                            // Convert markdown into HTML string using remark
                             const processedContent = await remark()
                                 .use(html)
                                 .process(matterResult.content);
@@ -117,14 +117,14 @@ export async function getStaticProps() {
                                     const fileContent = fs.readFileSync(filePath, "utf8");
                                     const matterResult = matter(fileContent);
 
-                                    // Use remark to convert markdown into HTML string
+                                    // Convert markdown into HTML string using remark
                                     const processedContent = await remark()
                                         .use(html)
                                         .process(matterResult.content);
                                     const contentHtml = processedContent.toString();
 
                                     const ImagePath = path.join(process.cwd(), "public", section, slug + ".png");
-                                    const Image = fs.existsSync(ImagePath) && "/" + section + "/" + slug + ".png"
+                                    const Image = fs.existsSync(ImagePath) && "/" + section + "/" + slug + ".png";
                                     posts.push({
                                         lang,         // Language (e.g., 'ua')
                                         section,      // Section (e.g., 'services')
@@ -142,8 +142,7 @@ export async function getStaticProps() {
         }
     }
 
-
-    // Return the array of posts as props
+    // Return the posts as props
     return {
         props: {
             posts,
@@ -183,7 +182,8 @@ export default function BasePage(
         image,
         post_article,
         carousel = true,
-        accordion_public = true,
+        accordion_article = true,
+        accordion_post_article = false,
         posts,
     }: BasePageSettings
 ) {
@@ -195,11 +195,9 @@ export default function BasePage(
         (post) => post.filename === "article-hide.md"
     );
 
-    const image_src =
-        posts.find((post) => post.image)?.image
+    const image_src = posts.find((post) => post.image)?.image;
 
     const t_menu = getT(lang, "menu");
-
     const t = getT(lang, "page");
 
     return (
@@ -217,12 +215,15 @@ export default function BasePage(
                                         width={350}
                                         height={350}
                                         alt={t_menu(title)}
-                                    />) : (<img
+                                    />
+                                ) : (
+                                    <img
                                         src="https://placehold.co/350x350/cccccc/ffffff"
                                         width="350"
                                         height="350"
                                         alt={t_menu(title)}
-                                    />)}
+                                    />
+                                )}
                             </div>
                         )}
                         <div className="ml-[10px] mt-2">
@@ -252,7 +253,7 @@ export default function BasePage(
                                 </BreadcrumbList>
                             </Breadcrumb>
                             <Separator />
-                            {accordion_public ? (
+                            {accordion_article ? (
                                 <Accordion type="single" collapsible>
                                     <AccordionItem value="item-1">
                                         <AccordionPublic className="dark:text-gray-200">
@@ -295,28 +296,38 @@ export default function BasePage(
                             {post_article && (
                                 <>
                                     <Separator className="mb-4" />
-                                    <Accordion type="single" collapsible>
-                                        <AccordionItem value="item-1">
-                                            <AccordionPublic className="dark:text-gray-200">
-                                                {publicArticle ? (
-                                                    <div dangerouslySetInnerHTML={{ __html: publicArticle.content }} />
-                                                ) : (
-                                                    <div>Public article not found</div>
-                                                )}
-                                            </AccordionPublic>
-                                            <AccordionHide>
-                                                {hideArticle ? (
-                                                    <div dangerouslySetInnerHTML={{ __html: hideArticle.content }} />
-                                                ) : (
-                                                    <div>Hidden article not found</div>
-                                                )}
-                                            </AccordionHide>
-                                            <AccordionTrigger
-                                                collapsedLabel={t("readMore")}
-                                                expandedLabel={t("close")}
-                                            />
-                                        </AccordionItem>
-                                    </Accordion>
+                                    {accordion_post_article ? (
+                                        <Accordion type="single" collapsible>
+                                            <AccordionItem value="item-1">
+                                                <AccordionPublic className="dark:text-gray-200">
+                                                    {publicArticle ? (
+                                                        <div dangerouslySetInnerHTML={{ __html: publicArticle.content }} />
+                                                    ) : (
+                                                        <div>Public article not found</div>
+                                                    )}
+                                                </AccordionPublic>
+                                                <AccordionHide>
+                                                    {hideArticle ? (
+                                                        <div dangerouslySetInnerHTML={{ __html: hideArticle.content }} />
+                                                    ) : (
+                                                        <div>Hidden article not found</div>
+                                                    )}
+                                                </AccordionHide>
+                                                <AccordionTrigger
+                                                    collapsedLabel={t("readMore")}
+                                                    expandedLabel={t("close")}
+                                                />
+                                            </AccordionItem>
+                                        </Accordion>
+                                    ) : (
+                                        <div className="prose">
+                                            {publicArticle ? (
+                                                <div dangerouslySetInnerHTML={{ __html: publicArticle.content }} />
+                                            ) : (
+                                                <div>Public article not found</div>
+                                            )}
+                                        </div>
+                                    )}
                                 </>
                             )}
                         </div>
