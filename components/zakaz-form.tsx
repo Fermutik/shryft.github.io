@@ -159,7 +159,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
 
             // Send a POST request to your API Gateway endpoint
             // (adjust the URL/path if necessary)
-            const response = await fetch("https://k2r6.execute-api.eu-north-1.amazonaws.com", {
+            const response = await fetch("https://k2reyxgqu6.execute-api.eu-north-1.amazonaws.com", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
