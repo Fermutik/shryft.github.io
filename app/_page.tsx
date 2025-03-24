@@ -194,6 +194,12 @@ export default function BasePage(
     const hideArticle = posts.find(
         (post) => post.filename === "article-hide.md"
     );
+    const lastPublicArticle = posts.find(
+        (post) => post.filename === "last-article-public.md"
+    );
+    const lastHideArticle = posts.find(
+        (post) => post.filename === "last-article-hide.md"
+    );
 
     const image_src = posts.find((post) => post.image)?.image;
 
@@ -300,15 +306,15 @@ export default function BasePage(
                                         <Accordion type="single" collapsible>
                                             <AccordionItem value="item-1">
                                                 <AccordionPublic className="dark:text-gray-200">
-                                                    {publicArticle ? (
-                                                        <div dangerouslySetInnerHTML={{ __html: publicArticle.content }} />
+                                                    {lastPublicArticle ? (
+                                                        <div dangerouslySetInnerHTML={{ __html: lastPublicArticle.content }} />
                                                     ) : (
                                                         <div>Public article not found</div>
                                                     )}
                                                 </AccordionPublic>
                                                 <AccordionHide>
-                                                    {hideArticle ? (
-                                                        <div dangerouslySetInnerHTML={{ __html: hideArticle.content }} />
+                                                    {lastHideArticle ? (
+                                                        <div dangerouslySetInnerHTML={{ __html: lastHideArticle.content }} />
                                                     ) : (
                                                         <div>Hidden article not found</div>
                                                     )}
@@ -321,8 +327,8 @@ export default function BasePage(
                                         </Accordion>
                                     ) : (
                                         <div className="prose">
-                                            {publicArticle ? (
-                                                <div dangerouslySetInnerHTML={{ __html: publicArticle.content }} />
+                                            {lastPublicArticle ? (
+                                                <div dangerouslySetInnerHTML={{ __html: lastPublicArticle.content }} />
                                             ) : (
                                                 <div>Public article not found</div>
                                             )}
