@@ -139,18 +139,23 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
     })
 
     // Dialog states
-    const [alertOpen, setAlertOpen] = useState(false)       // for successful submission
+    const [alertOpen, setAlertOpen] = useState(false)        // for successful submission
     const [fileErrorOpen, setFileErrorOpen] = useState(false) // for file size errors
+    const [serverErrorOpen, setServerErrorOpen] = useState(false) // for server errors
+
     // State to hold the selected file from the file input
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
     // Reference for the hidden file input element
     const fileInputRef = useRef<HTMLInputElement>(null)
 
-    // File input change handler: check file size and show error dialog if necessary
+    // File input change handler:
+    // Check approximate file size limit (4 MB) before base64 encoding
+    // to keep total payload under ~6 MB after encoding
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0] || null
         if (file) {
-            if (file.size > 50 * 1024 * 1024) {
+            // Checking 4 MB limit
+            if (file.size > 4 * 1024 * 1024) {
                 setFileErrorOpen(true)
                 if (fileInputRef.current) {
                     fileInputRef.current.value = ""
@@ -164,7 +169,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
     /**
      * onSubmit handler: builds a JSON object with form fields,
      * captcha token and an optional file (base64 encoded, if present),
-     * then sends it to the API Gateway endpoint via POST.
+     * then checks final payload size and sends it to the API Gateway endpoint.
      */
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
@@ -191,17 +196,29 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                 file_content: fileContent,
             }
 
+            const requestBody = JSON.stringify(dataToSend)
+            const sizeInBytes = new Blob([requestBody]).size
+
+            // 6 MB limit
+            const maxPayloadSize = 6 * 1024 * 1024 // 6,291,456 bytes
+            if (sizeInBytes > maxPayloadSize) {
+                console.error("Payload size exceeds 6 MB. Current size:", sizeInBytes)
+                setFileErrorOpen(true)
+                return
+            }
+
             // Send POST request with JSON payload
             const response = await fetch("https://k2reyxgqu6.execute-api.eu-north-1.amazonaws.com", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(dataToSend),
+                body: requestBody,
             })
 
             if (!response.ok) {
                 console.error("Error from server:", response.status, response.statusText)
+                setServerErrorOpen(true) // Open dialog for server error
                 return
             }
 
@@ -214,6 +231,8 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
             setSelectedFile(null)
         } catch (error) {
             console.error("Error submitting form:", error)
+            // In case of network errors, etc. we also show server error
+            setServerErrorOpen(true)
         }
     }
 
@@ -240,7 +259,12 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormControl>
-                                        <Input placeholder={t("Name")} className="bg-background" {...field} disabled={isSubmitting} />
+                                        <Input
+                                            placeholder={t("Name")}
+                                            className="bg-background"
+                                            {...field}
+                                            disabled={isSubmitting}
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -255,7 +279,11 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormControl>
-                                            <PhoneInput placeholder="+38(___)___-__-__" className="w-full bg-background" {...field} />
+                                            <PhoneInput
+                                                placeholder="+38(___)___-__-__"
+                                                className="w-full bg-background"
+                                                {...field}
+                                            />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -268,7 +296,12 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormControl>
-                                            <Input placeholder={t("Email")} className="w-full bg-background" {...field} disabled={isSubmitting} />
+                                            <Input
+                                                placeholder={t("Email")}
+                                                className="w-full bg-background"
+                                                {...field}
+                                                disabled={isSubmitting}
+                                            />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -425,6 +458,23 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                     <AlertDialogFooter>
                         <AlertDialogAction onClick={() => setFileErrorOpen(false)}>
                             OK
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
+            {/* AlertDialog for server error */}
+            <AlertDialog open={serverErrorOpen} onOpenChange={setServerErrorOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Ошибка</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("ServerError")}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogAction onClick={() => setServerErrorOpen(false)}>
+                            ОК
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
