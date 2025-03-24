@@ -5,6 +5,7 @@ import * as React from "react"
 import { useForm } from "react-hook-form"
 import { useState, useRef, useEffect } from "react"
 import { z } from "zod"
+import { Loader2 } from "lucide-react" // Import Loader2 for the loading indicator
 
 // Add type declaration for Cloudflare Turnstile
 declare global {
@@ -18,7 +19,7 @@ declare global {
 import { Button } from "@/components/ui/button"
 import Attach from "@/components/icons/attach"
 import { CalendarIcon } from "lucide-react"
-import { uk, ru } from "react-day-picker/locale";
+import { uk, ru } from "react-day-picker/locale"
 import {
     Form,
     FormControl,
@@ -89,6 +90,9 @@ const readFileAsBase64 = (file: File): Promise<string> => {
  *
  * The form submission sends a JSON payload (including an optional file)
  * to an AWS API Gateway endpoint, which invokes a Lambda function for processing.
+ *
+ * After sending the request and until the server responds, a loading overlay is displayed
+ * and the form is blocked.
  */
 export const ZakazForm = ({ lang }: BasePageProps) => {
     // Get translation function for the "zakaz-form" namespace
@@ -170,6 +174,8 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
      * onSubmit handler: builds a JSON object with form fields,
      * captcha token and an optional file (base64 encoded, if present),
      * then checks final payload size and sends it to the API Gateway endpoint.
+     *
+     * During submission, the form displays a loading overlay and remains blocked.
      */
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
@@ -247,11 +253,11 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
     const locale = lang === "ua" ? uk : ru
 
     return (
-        <div className="text-center p-2 rounded-lg shadow-xl w-full">
+        // Added "relative" to enable absolute positioning of the loading overlay
+        <div className="relative text-center p-2 rounded-lg shadow-xl w-full">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col items-start w-full space-x-2">
                     <div className="flex flex-col space-y-4 w-full">
-
                         {/* Username field */}
                         <FormField
                             control={form.control}
@@ -283,6 +289,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                                                 placeholder="+38(___)___-__-__"
                                                 className="w-full bg-background"
                                                 {...field}
+                                                disabled={isSubmitting} // Disable during submission
                                             />
                                         </FormControl>
                                         <FormMessage />
@@ -327,6 +334,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                                                                 "w-1/2 text-left font-normal",
                                                                 !field.value && "text-muted-foreground"
                                                             )}
+                                                            disabled={isSubmitting} // Disable button during submission
                                                         >
                                                             {field.value ? (
                                                                 format(field.value, "P", { locale })
@@ -373,6 +381,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                                                 wrap="soft"
                                                 className="bg-background h-22 overflow-y-scroll box-border"
                                                 {...field}
+                                                disabled={isSubmitting} // Disable textarea during submission
                                             />
                                         </FormControl>
                                         <FormMessage />
@@ -396,13 +405,19 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                             <Button type="submit" disabled={isSubmitting}>
                                 {t("Submit")}
                             </Button>
-                            <Button variant="outline" type="button" onClick={handleReset}>
+                            <Button
+                                variant="outline"
+                                type="button"
+                                onClick={handleReset}
+                                disabled={isSubmitting} // Disable reset button during submission
+                            >
                                 {t("Reset")}
                             </Button>
                             <Button
                                 variant="outline"
                                 type="button"
                                 onClick={() => fileInputRef.current?.click()}
+                                disabled={isSubmitting} // Disable file selection during submission
                             >
                                 {t("SelectFile")}
                             </Button>
@@ -430,6 +445,14 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                     />
                 </form>
             </Form>
+
+            {/* Loading overlay displayed during form submission */}
+            {isSubmitting && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/70 z-10">
+                    <Loader2 className="animate-spin" size={24} />
+                    <span className="mt-2">{t("Loading")}</span>
+                </div>
+            )}
 
             {/* AlertDialog for successful submission */}
             <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
