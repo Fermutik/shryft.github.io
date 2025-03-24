@@ -64,11 +64,33 @@ import {
 } from "@/components/ui/popover"
 
 /**
+ * Helper function to read a file as a base64 encoded string.
+ * It returns the base64 string (without the data prefix).
+ */
+const readFileAsBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => {
+            const result = reader.result
+            if (typeof result === "string") {
+                // Remove the data URL prefix (e.g. "data:application/octet-stream;base64,")
+                const base64 = result.split(",")[1]
+                resolve(base64)
+            } else {
+                reject("Failed to read file as base64 string")
+            }
+        }
+        reader.onerror = (error) => reject(error)
+    })
+}
+
+/**
  * This component represents a form for user submissions,
  * including a Cloudflare Turnstile captcha for spam protection.
  *
- * The form submission sends data (including an optional file) to an AWS API Gateway endpoint,
- * which invokes a Lambda function for further processing.
+ * The form submission sends a JSON payload (including an optional file)
+ * to an AWS API Gateway endpoint, which invokes a Lambda function for processing.
  */
 export const ZakazForm = ({ lang }: BasePageProps) => {
     // Get translation function for the "zakaz-form" namespace
@@ -147,32 +169,44 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
     }
 
     /**
-     * onSubmit handler: sends a POST request with form fields,
-     * captcha token and an optional file (up to 50MB).
+     * onSubmit handler: builds a JSON object with form fields,
+     * captcha token and an optional file (base64 encoded, if present),
+     * then sends it to the API Gateway endpoint.
      */
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-            // Convert date to an ISO string
+            // Convert date to an ISO string (YYYY-MM-DD)
             const dobString = values.dob
                 ? values.dob.toISOString().split("T")[0]
                 : null
 
-            // Create FormData to send form fields and file
-            const formData = new FormData()
-            formData.append("username", values.username)
-            formData.append("email", values.email)
-            formData.append("tel", values.tel)
-            formData.append("comment", values.comment)
-            formData.append("dob", dobString || "")
-            formData.append("captcha_token", captchaToken)
+            // Prepare file fields if a file is selected
+            let fileName: string | null = null
+            let fileContent: string | null = null
             if (selectedFile) {
-                formData.append("file", selectedFile)
+                fileName = selectedFile.name
+                fileContent = await readFileAsBase64(selectedFile)
             }
 
-            // Send POST request to API Gateway endpoint
+            // Create the JSON payload to send to the Lambda function
+            const dataToSend = {
+                username: values.username,
+                email: values.email,
+                tel: values.tel,
+                comment: values.comment,
+                dob: dobString,
+                captcha_token: captchaToken,
+                file_name: fileName,
+                file_content: fileContent,
+            }
+
+            // Send POST request with JSON payload
             const response = await fetch("https://k2reyxgqu6.execute-api.eu-north-1.amazonaws.com", {
                 method: "POST",
-                body: formData,
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(dataToSend),
             })
 
             if (!response.ok) {
