@@ -67,32 +67,31 @@ import {
  * This component represents a form for user submissions,
  * including a Cloudflare Turnstile captcha for spam protection.
  *
- * Once submitted, the form data is sent to an AWS API Gateway endpoint
- * which invokes a Lambda function. The Lambda function processes the data,
- * verifies the captcha, and (optionally) sends emails.
+ * The form submission sends data (including an optional file) to an AWS API Gateway endpoint,
+ * which invokes a Lambda function for further processing.
  */
 export const ZakazForm = ({ lang }: BasePageProps) => {
     // Get translation function for the "zakaz-form" namespace
     const t = getT(lang, "zakaz-form")
 
-    // We'll track component mount state to ensure we only render the captcha when mounted
+    // Track component mount state to render captcha only on the client side
     const [mounted, setMounted] = useState(false);
     useEffect(() => {
         setMounted(true);
     }, []);
 
-    // Reference to the DOM element for Turnstile
+    // Reference to the DOM element for Turnstile captcha
     const captchaRef = useRef<HTMLDivElement>(null);
 
-    // Store the captcha token from Turnstile
+    // State to store the captcha token
     const [captchaToken, setCaptchaToken] = useState<string>("");
 
-    // Initialize the Turnstile widget after component is mounted
+    // Initialize the Turnstile widget once the component is mounted
     useEffect(() => {
         if (mounted && window.turnstile && captchaRef.current) {
             window.turnstile.render(captchaRef.current, {
                 sitekey: "0x4AAAAAABB8ZIgIv9VSjJkC",
-                // The callback is crucial: it gives us the captcha token on success
+                // Callback function returns the captcha token on success
                 callback: (token: string) => {
                     setCaptchaToken(token);
                 },
@@ -100,7 +99,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
         }
     }, [mounted]);
 
-    // Define the form schema using Zod
+    // Define the form schema using Zod for validation
     const formSchema = z.object({
         email: z.string().email({ message: t("InvalidEmail") }),
         username: z
@@ -112,7 +111,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
         dob: z.date().optional(),
     });
 
-    // Initialize React Hook Form with Zod validation
+    // Initialize React Hook Form with Zod resolver
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -137,8 +136,8 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
     }
 
     /**
-     * onSubmit handler: sends a POST request to API Gateway with
-     * form fields + captcha token. On success, shows the AlertDialog.
+     * onSubmit handler: sends a POST request to API Gateway with form fields,
+     * captcha token and an optional file (up to 50MB).
      */
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
@@ -147,29 +146,35 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                 ? values.dob.toISOString().split("T")[0]
                 : null;
 
-            // Prepare the payload, including the captcha token
-            const dataToSend = {
-                username: values.username,
-                email: values.email,
-                tel: values.tel,
-                comment: values.comment,
-                dob: dobString,
-                captcha_token: captchaToken,
-            };
+            // If a file is selected, check its size (limit: 50MB)
+            if (selectedFile && selectedFile.size > 50 * 1024 * 1024) {
+                console.error("Selected file exceeds the 50MB size limit.");
+                // Optionally, you can display an error message to the user here
+                return;
+            }
+
+            // Create FormData to send both form fields and file
+            const formData = new FormData();
+            formData.append("username", values.username);
+            formData.append("email", values.email);
+            formData.append("tel", values.tel);
+            formData.append("comment", values.comment);
+            formData.append("dob", dobString || "");
+            formData.append("captcha_token", captchaToken);
+            if (selectedFile) {
+                formData.append("file", selectedFile);
+            }
 
             // Send a POST request to your API Gateway endpoint
-            // (adjust the URL/path if necessary)
+            // Do not set Content-Type header manually when sending FormData
             const response = await fetch("https://k2reyxgqu6.execute-api.eu-north-1.amazonaws.com", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(dataToSend),
+                body: formData,
             });
 
             if (!response.ok) {
                 console.error("Error from server:", response.status, response.statusText);
-                // You can show an error dialog/toast here
+                // Optionally, display an error message to the user here
                 return;
             }
 
@@ -185,7 +190,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
             setSelectedFile(null);
         } catch (error) {
             console.error("Error submitting form:", error);
-            // You can show an error dialog/toast here if needed
+            // Optionally, display an error message to the user here
         }
     }
 
@@ -300,7 +305,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                                                     selected={field.value}
                                                     onSelect={field.onChange}
                                                     locale={locale}
-                                                    // You can disable dates in the past, for example
+                                                    // Disable past dates, for example
                                                     disabled={(date) => {
                                                         const today = new Date();
                                                         today.setHours(0, 0, 0, 0);
