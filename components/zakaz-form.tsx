@@ -18,7 +18,7 @@ declare global {
 import { Button } from "@/components/ui/button"
 import Attach from "@/components/icons/attach"
 import { CalendarIcon } from "lucide-react"
-import { uk, ru } from "react-day-picker/locale"
+import { uk, ru } from "react-day-picker/locale";
 import {
     Form,
     FormControl,
@@ -31,13 +31,11 @@ import { Input } from "@/components/ui/input"
 import {
     AlertDialog,
     AlertDialogAction,
-    AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import {
     Tooltip,
@@ -120,13 +118,10 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
         }
     }, [mounted])
 
-    // Define form schema using Zod for validation
+    // Define the form schema using Zod for validation
     const formSchema = z.object({
         email: z.string().email({ message: t("InvalidEmail") }),
-        username: z
-            .string()
-            .min(1, { message: t("UsernameRequired") })
-            .max(50, { message: t("UsernameTooLong") }),
+        username: z.string().min(1, { message: t("UsernameRequired") }).max(50, { message: t("UsernameTooLong") }),
         tel: z.string().length(17, { message: t("InvalidPhone") }),
         comment: z.string().max(500, { message: t("CommentTooLong") }),
         dob: z.date().optional(),
@@ -143,13 +138,12 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
         },
     })
 
-    // State for successful submission dialog
-    const [alertOpen, setAlertOpen] = useState(false)
-    // State for file size error dialog
-    const [fileErrorOpen, setFileErrorOpen] = useState(false)
+    // Dialog states
+    const [alertOpen, setAlertOpen] = useState(false)       // for successful submission
+    const [fileErrorOpen, setFileErrorOpen] = useState(false) // for file size errors
     // State to hold the selected file from the file input
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
-    // Ref for the hidden file input element
+    // Reference for the hidden file input element
     const fileInputRef = useRef<HTMLInputElement>(null)
 
     // File input change handler: check file size and show error dialog if necessary
@@ -157,7 +151,6 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
         const file = event.target.files?.[0] || null
         if (file) {
             if (file.size > 50 * 1024 * 1024) {
-                // If file exceeds 50MB, show error dialog and clear file input
                 setFileErrorOpen(true)
                 if (fileInputRef.current) {
                     fileInputRef.current.value = ""
@@ -171,16 +164,14 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
     /**
      * onSubmit handler: builds a JSON object with form fields,
      * captcha token and an optional file (base64 encoded, if present),
-     * then sends it to the API Gateway endpoint.
+     * then sends it to the API Gateway endpoint via POST.
      */
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
             // Convert date to an ISO string (YYYY-MM-DD)
-            const dobString = values.dob
-                ? values.dob.toISOString().split("T")[0]
-                : null
+            const dobString = values.dob ? values.dob.toISOString().split("T")[0] : null
 
-            // Prepare file fields if a file is selected
+            // Convert file to base64 if selected
             let fileName: string | null = null
             let fileContent: string | null = null
             if (selectedFile) {
@@ -188,7 +179,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                 fileContent = await readFileAsBase64(selectedFile)
             }
 
-            // Create the JSON payload to send to the Lambda function
+            // Build JSON payload
             const dataToSend = {
                 username: values.username,
                 email: values.email,
@@ -217,7 +208,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
             const respJson = await response.json()
             console.log("Server response:", respJson)
 
-            // Open the success dialog and reset the form
+            // On success, show alert dialog and reset form
             setAlertOpen(true)
             form.reset()
             setSelectedFile(null)
@@ -226,7 +217,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
         }
     }
 
-    // Reset handler: clears the form and file
+    // Reset handler: clears the form and the selected file
     const handleReset = () => {
         form.reset()
         setSelectedFile(null)
@@ -241,6 +232,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col items-start w-full space-x-2">
                     <div className="flex flex-col space-y-4 w-full">
+
                         {/* Username field */}
                         <FormField
                             control={form.control}
@@ -276,7 +268,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormControl>
-                                            <Input className="w-full bg-background" placeholder={t("Email")} {...field} disabled={isSubmitting} />
+                                            <Input placeholder={t("Email")} className="w-full bg-background" {...field} disabled={isSubmitting} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -320,6 +312,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                                                     selected={field.value}
                                                     onSelect={field.onChange}
                                                     locale={locale}
+                                                    // Example: disable past dates
                                                     disabled={(date) => {
                                                         const today = new Date()
                                                         today.setHours(0, 0, 0, 0)
@@ -365,7 +358,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                             />
                         )}
 
-                        {/* Buttons: Submit, Reset, File upload */}
+                        {/* Submit, Reset, and File Selection Buttons */}
                         <div className="flex flex-row w-full space-x-2 mt-2">
                             <Button type="submit" disabled={isSubmitting}>
                                 {t("Submit")}
