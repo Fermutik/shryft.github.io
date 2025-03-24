@@ -18,7 +18,7 @@ declare global {
 import { Button } from "@/components/ui/button"
 import Attach from "@/components/icons/attach"
 import { CalendarIcon } from "lucide-react"
-import { uk, ru } from "react-day-picker/locale";
+import { uk, ru } from "react-day-picker/locale"
 import {
     Form,
     FormControl,
@@ -75,31 +75,30 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
     const t = getT(lang, "zakaz-form")
 
     // Track component mount state to render captcha only on the client side
-    const [mounted, setMounted] = useState(false);
+    const [mounted, setMounted] = useState(false)
     useEffect(() => {
-        setMounted(true);
-    }, []);
+        setMounted(true)
+    }, [])
 
     // Reference to the DOM element for Turnstile captcha
-    const captchaRef = useRef<HTMLDivElement>(null);
-
+    const captchaRef = useRef<HTMLDivElement>(null)
     // State to store the captcha token
-    const [captchaToken, setCaptchaToken] = useState<string>("");
+    const [captchaToken, setCaptchaToken] = useState<string>("")
 
     // Initialize the Turnstile widget once the component is mounted
     useEffect(() => {
         if (mounted && window.turnstile && captchaRef.current) {
             window.turnstile.render(captchaRef.current, {
                 sitekey: "0x4AAAAAABB8ZIgIv9VSjJkC",
-                // Callback function returns the captcha token on success
+                // Callback returns the captcha token on success
                 callback: (token: string) => {
-                    setCaptchaToken(token);
+                    setCaptchaToken(token)
                 },
-            });
+            })
         }
-    }, [mounted]);
+    }, [mounted])
 
-    // Define the form schema using Zod for validation
+    // Define form schema using Zod for validation
     const formSchema = z.object({
         email: z.string().email({ message: t("InvalidEmail") }),
         username: z
@@ -109,7 +108,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
         tel: z.string().length(17, { message: t("InvalidPhone") }),
         comment: z.string().max(500, { message: t("CommentTooLong") }),
         dob: z.date().optional(),
-    });
+    })
 
     // Initialize React Hook Form with Zod resolver
     const form = useForm<z.infer<typeof formSchema>>({
@@ -122,95 +121,91 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
         },
     })
 
-    // State to control the open state of AlertDialog
+    // State for successful submission dialog
     const [alertOpen, setAlertOpen] = useState(false)
+    // State for file size error dialog
+    const [fileErrorOpen, setFileErrorOpen] = useState(false)
     // State to hold the selected file from the file input
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
     // Ref for the hidden file input element
     const fileInputRef = useRef<HTMLInputElement>(null)
 
-    // File input change handler: update state with the selected file
+    // File input change handler: check file size and show error dialog if necessary
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0] || null
-        setSelectedFile(file)
+        if (file) {
+            if (file.size > 50 * 1024 * 1024) {
+                // If file exceeds 50MB, show error dialog and clear file input
+                setFileErrorOpen(true)
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = ""
+                }
+                return
+            }
+            setSelectedFile(file)
+        }
     }
 
     /**
-     * onSubmit handler: sends a POST request to API Gateway with form fields,
+     * onSubmit handler: sends a POST request with form fields,
      * captcha token and an optional file (up to 50MB).
      */
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-            // Convert date to an ISO string or any suitable string format
+            // Convert date to an ISO string
             const dobString = values.dob
                 ? values.dob.toISOString().split("T")[0]
-                : null;
+                : null
 
-            // If a file is selected, check its size (limit: 50MB)
-            if (selectedFile && selectedFile.size > 50 * 1024 * 1024) {
-                console.error("Selected file exceeds the 50MB size limit.");
-                // Optionally, you can display an error message to the user here
-                return;
-            }
-
-            // Create FormData to send both form fields and file
-            const formData = new FormData();
-            formData.append("username", values.username);
-            formData.append("email", values.email);
-            formData.append("tel", values.tel);
-            formData.append("comment", values.comment);
-            formData.append("dob", dobString || "");
-            formData.append("captcha_token", captchaToken);
+            // Create FormData to send form fields and file
+            const formData = new FormData()
+            formData.append("username", values.username)
+            formData.append("email", values.email)
+            formData.append("tel", values.tel)
+            formData.append("comment", values.comment)
+            formData.append("dob", dobString || "")
+            formData.append("captcha_token", captchaToken)
             if (selectedFile) {
-                formData.append("file", selectedFile);
+                formData.append("file", selectedFile)
             }
 
-            // Send a POST request to your API Gateway endpoint
-            // Do not set Content-Type header manually when sending FormData
+            // Send POST request to API Gateway endpoint
             const response = await fetch("https://k2reyxgqu6.execute-api.eu-north-1.amazonaws.com", {
                 method: "POST",
                 body: formData,
-            });
+            })
 
             if (!response.ok) {
-                console.error("Error from server:", response.status, response.statusText);
-                // Optionally, display an error message to the user here
-                return;
+                console.error("Error from server:", response.status, response.statusText)
+                return
             }
 
-            // Read the JSON response (if your Lambda returns a JSON body)
-            const respJson = await response.json();
-            console.log("Server response:", respJson);
+            const respJson = await response.json()
+            console.log("Server response:", respJson)
 
-            // If successful, open the AlertDialog
-            setAlertOpen(true);
-
-            // Reset the form fields and clear the selected file
-            form.reset();
-            setSelectedFile(null);
+            // Open the success dialog and reset the form
+            setAlertOpen(true)
+            form.reset()
+            setSelectedFile(null)
         } catch (error) {
-            console.error("Error submitting form:", error);
-            // Optionally, display an error message to the user here
+            console.error("Error submitting form:", error)
         }
     }
 
     // Reset handler: clears the form and file
     const handleReset = () => {
-        form.reset();
-        setSelectedFile(null);
+        form.reset()
+        setSelectedFile(null)
     }
 
-    const { isSubmitting, isValid } = form.formState;
-    const [date, setDate] = React.useState<Date | undefined>(new Date());
-    const locale = lang === "ua" ? uk : ru;
+    const { isSubmitting } = form.formState
+    const [date, setDate] = React.useState<Date | undefined>(new Date())
+    const locale = lang === "ua" ? uk : ru
 
     return (
         <div className="text-center p-2 rounded-lg shadow-xl w-full">
             <Form {...form}>
-                <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="flex flex-col items-start w-full space-x-2"
-                >
+                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col items-start w-full space-x-2">
                     <div className="flex flex-col space-y-4 w-full">
                         {/* Username field */}
                         <FormField
@@ -219,12 +214,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormControl>
-                                        <Input
-                                            placeholder={t("Name")}
-                                            className="bg-background"
-                                            {...field}
-                                            disabled={isSubmitting}
-                                        />
+                                        <Input placeholder={t("Name")} className="bg-background" {...field} disabled={isSubmitting} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -239,11 +229,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormControl>
-                                            <PhoneInput
-                                                placeholder="+38(___)___-__-__"
-                                                className="w-full bg-background"
-                                                {...field}
-                                            />
+                                            <PhoneInput placeholder="+38(___)___-__-__" className="w-full bg-background" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -256,12 +242,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormControl>
-                                            <Input
-                                                className="w-full bg-background"
-                                                placeholder={t("Email")}
-                                                {...field}
-                                                disabled={isSubmitting}
-                                            />
+                                            <Input className="w-full bg-background" placeholder={t("Email")} {...field} disabled={isSubmitting} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -305,11 +286,10 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                                                     selected={field.value}
                                                     onSelect={field.onChange}
                                                     locale={locale}
-                                                    // Disable past dates, for example
                                                     disabled={(date) => {
-                                                        const today = new Date();
-                                                        today.setHours(0, 0, 0, 0);
-                                                        return date < today;
+                                                        const today = new Date()
+                                                        today.setHours(0, 0, 0, 0)
+                                                        return date < today
                                                     }}
                                                 />
                                             </PopoverContent>
@@ -391,7 +371,7 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                 </form>
             </Form>
 
-            {/* AlertDialog to confirm successful submission */}
+            {/* AlertDialog for successful submission */}
             <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
@@ -400,6 +380,23 @@ export const ZakazForm = ({ lang }: BasePageProps) => {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogAction onClick={() => setAlertOpen(false)}>
+                            OK
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
+            {/* AlertDialog for file size error */}
+            <AlertDialog open={fileErrorOpen} onOpenChange={setFileErrorOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Error</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("FileSizeExceeded")}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogAction onClick={() => setFileErrorOpen(false)}>
                             OK
                         </AlertDialogAction>
                     </AlertDialogFooter>
