@@ -1,5 +1,5 @@
 import React from "react";
-import { Slash } from "lucide-react"
+import { Slash } from "lucide-react";
 
 // UI components imports (shared)
 import {
@@ -18,7 +18,7 @@ import { ZakazForm } from "@/components/zakaz-form";
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 import { getT } from "@/lib/utils";
-import { AppSidebar } from "@/components/app-sidebar"
+import { AppSidebar } from "@/components/app-sidebar";
 import {
     Breadcrumb,
     BreadcrumbEllipsis,
@@ -27,7 +27,7 @@ import {
     BreadcrumbList,
     BreadcrumbPage,
     BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
+} from "@/components/ui/breadcrumb";
 
 export interface BasePageProps {
     lang: string;
@@ -48,10 +48,7 @@ export interface BasePageSettings {
     title: string;
     form: boolean;
     image: boolean;
-    post_article: boolean;
     carousel?: boolean;
-    accordion_article?: boolean;
-    accordion_post_article?: boolean;
     posts: Post[];
 }
 
@@ -59,7 +56,7 @@ import {
     SidebarInset,
     SidebarProvider,
     SidebarTrigger,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 import fs from "fs";
 import path from "path";
@@ -180,10 +177,7 @@ export default function BasePage(
         title,
         form,
         image,
-        post_article,
         carousel = true,
-        accordion_article = true,
-        accordion_post_article = false,
         posts,
     }: BasePageSettings
 ) {
@@ -259,7 +253,8 @@ export default function BasePage(
                                 </BreadcrumbList>
                             </Breadcrumb>
                             <Separator />
-                            {accordion_article ? (
+                            {hideArticle ? (
+                                // If hideArticle exists, render the content in an accordion with hidden section
                                 <Accordion type="single" collapsible>
                                     <AccordionItem value="item-1">
                                         <AccordionPublic className="dark:text-gray-200">
@@ -270,11 +265,7 @@ export default function BasePage(
                                             )}
                                         </AccordionPublic>
                                         <AccordionHide>
-                                            {hideArticle ? (
-                                                <div dangerouslySetInnerHTML={{ __html: hideArticle.content }} />
-                                            ) : (
-                                                <div>Hidden article not found</div>
-                                            )}
+                                            <div dangerouslySetInnerHTML={{ __html: hideArticle.content }} />
                                         </AccordionHide>
                                         <AccordionTrigger
                                             collapsedLabel={t("readMore")}
@@ -283,6 +274,7 @@ export default function BasePage(
                                     </AccordionItem>
                                 </Accordion>
                             ) : (
+                                // If hideArticle is not defined, just show the public article content
                                 <div className="prose">
                                     {publicArticle ? (
                                         <div dangerouslySetInnerHTML={{ __html: publicArticle.content }} />
@@ -299,25 +291,18 @@ export default function BasePage(
                                     <ZakazForm lang={lang} />
                                 </>
                             )}
-                            {post_article && (
+                            {lastPublicArticle && (
                                 <>
                                     <Separator className="mb-4" />
-                                    {accordion_post_article ? (
+                                    {lastHideArticle ? (
+                                        // If lastHideArticle exists, render the content in an accordion with hidden section
                                         <Accordion type="single" collapsible>
                                             <AccordionItem value="item-1">
                                                 <AccordionPublic className="dark:text-gray-200">
-                                                    {lastPublicArticle ? (
-                                                        <div dangerouslySetInnerHTML={{ __html: lastPublicArticle.content }} />
-                                                    ) : (
-                                                        <div>Public article not found</div>
-                                                    )}
+                                                    <div dangerouslySetInnerHTML={{ __html: lastPublicArticle.content }} />
                                                 </AccordionPublic>
                                                 <AccordionHide>
-                                                    {lastHideArticle ? (
-                                                        <div dangerouslySetInnerHTML={{ __html: lastHideArticle.content }} />
-                                                    ) : (
-                                                        <div>Hidden article not found</div>
-                                                    )}
+                                                    <div dangerouslySetInnerHTML={{ __html: lastHideArticle.content }} />
                                                 </AccordionHide>
                                                 <AccordionTrigger
                                                     collapsedLabel={t("readMore")}
@@ -326,12 +311,9 @@ export default function BasePage(
                                             </AccordionItem>
                                         </Accordion>
                                     ) : (
+                                        // If lastHideArticle is not defined, just show the public article content
                                         <div className="prose">
-                                            {lastPublicArticle ? (
-                                                <div dangerouslySetInnerHTML={{ __html: lastPublicArticle.content }} />
-                                            ) : (
-                                                <div>Public article not found</div>
-                                            )}
+                                            <div dangerouslySetInnerHTML={{ __html: lastPublicArticle.content }} />
                                         </div>
                                     )}
                                 </>

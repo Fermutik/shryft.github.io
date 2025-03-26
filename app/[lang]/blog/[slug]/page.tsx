@@ -54,7 +54,7 @@ export default async function CustomPage({
 
     return BasePage(
         { lang, breadcrumbs },
-        { title: slug, form: true, image: true, post_article: false, accordion_article: false, carousel: false, posts: filteredPosts }
+        { title: slug, form: true, image: true, carousel: false, posts: filteredPosts }
     );
 }
 
