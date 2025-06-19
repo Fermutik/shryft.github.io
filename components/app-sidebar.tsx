@@ -60,7 +60,7 @@ const data = {
         { title: "drawings", url: "/large-format/drawings" },
         { title: "tablets", url: "/large-format/tablets" },
         { title: "tracing-paper-print", url: "/large-format/tracing-paper-print" },
-        { title: "posters-bills", url: "/large-format/posters-bills" },
+        { title: "posters", url: "/large-format/posters" },
         { title: "self-adhesive-print", url: "/large-format/self-adhesive-print" },
         { title: "photo-wallpaper", url: "/large-format/photo-wallpaper" },
         { title: "oracal-print", url: "/large-format/oracal-print" },
